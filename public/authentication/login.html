@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Recruiters Hub</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="../assets/img/Untitled design.svg" alt="Recruiters Hub Logo">
+                <h1>Recruiters Hub</h1>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="signup.html">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Welcome Back</h2>
+                <p>Login to your developer account</p>
+                
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="loginEmail" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="loginPassword" name="password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="loginRememberMe" name="rememberMe">
+                            Remember me
+                        </label>
+                    </div>
+                    
+                    <button type="button" onClick="login()" class="btn-primary">Login</button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+                    <p><a href="#" id="forgotPassword">Forgot your password?</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Recruiters Hub. All rights reserved.</p>
+    </footer>
+
+    
+    <!-- App Scripts -->
+    <!--script type="module" src="assets/js/firebase-config.js"></script>
+    <script type="module" src="assets/js/utils.js"></script-->
+    <script src="./auth.js"></script>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+</body>
+</html> 

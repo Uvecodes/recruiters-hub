@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Profile - Recruiters Hub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="./assets/img/Untitled design.svg" alt="Recruiters Hub Logo">
+                <h1>Recruiters Hub</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <!-- <button id="logoutBtn" onClick="logout()" class="btn-secondary">Logout</button> -->
+                 <button type="button" onClick="logout()" id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <img id="profileAvatar" src="assets/img/default-avatar.png" alt="Developer Avatar">
+                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                    <button type="button" id="avatarUploadBtn" class="avatar-upload-btn">Change Photo</button>
+                </div>
+                <div class="profile-info">
+                    <h1 id="profileName">Loading...</h1>
+                    <p id="profileTitle">Loading...</p>
+                    <p id="profileLocation">Loading...</p>
+                    <div class="profile-actions">
+                        <!-- this contact developer button will be useful when we want to build the profile page recruiters will see -->
+                        <button id="contactBtn" class="btn-primary">Contact Developer</button>
+                        <button id="saveBtn" class="btn-secondary">Save Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-main">
+                    <section class="profile-section">
+                        <h2>About</h2>
+                        <p id="profileAbout">Loading...</p>
+                    </section>
+
+                    <section class="profile-section">
+                        <h2>Skills</h2>
+                        <div id="skillsList" class="skills-grid">
+                            <!-- Skills will be populated by JavaScript -->
+                        </div>
+                        <div class="skills-input-container">
+                            <input type="text" id="newSkillInput" placeholder="Enter a skill...">
+                            <button type="button" id="addSkillBtn">Add Skill</button>
+                        </div>
+                    </section>
+
+                    <section class="profile-section">
+                        <h2>Experience</h2>
+                        <div id="experienceList">
+                            <!-- Experience will be populated by JavaScript -->
+                        </div>
+                        <button type="button" id="addExperienceBtn" class="add-experience-btn">Add Experience</button>
+                    </section>
+
+                    <section class="profile-section">
+                        <h2>Education</h2>
+                        <div id="educationList">
+                            <!-- Education will be populated by JavaScript -->
+                        </div>
+                        <button type="button" id="addEducationBtn" class="add-education-btn">Add Education</button>
+                    </section>
+
+                    <section class="profile-section">
+                        <h2>Projects</h2>
+                        <div id="projectsList" class="projects-grid">
+                            <!-- Projects will be populated by JavaScript -->
+                        </div>
+                        <button type="button" id="addProjectBtn" class="add-project-btn">Add Project</button>
+                    </section>
+                </div>
+
+                <aside class="profile-sidebar">
+                    <section class="sidebar-section">
+                        <h3>Contact Information</h3>
+                        <div id="contactInfo">
+                            <!-- Contact info will be populated by JavaScript -->
+                        </div>
+                    </section>
+
+                    <section class="sidebar-section">
+                        <h3>Availability</h3>
+                        <div id="availabilityInfo">
+                            <!-- Availability info will be populated by JavaScript -->
+                        </div>
+                    </section>
+
+                    <section class="sidebar-section">
+                        <h3>Resume</h3>
+                        <div id="resumeSection">
+                            <a id="resumeLink" href="#" class="btn-secondary" target="_blank">Upload Resume</a>
+                        </div>
+                    </section>
+
+                    <section class="sidebar-section">
+                        <h3>Social Links</h3>
+                        <div id="socialLinks">
+                            <!-- Social links will be populated by JavaScript -->
+                        </div>
+                    </section>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Contact Developer</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">Your Name</label>
+                    <input type="text" id="contactName" name="contactName" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Your Email</label>
+                    <input type="email" id="contactEmail" name="contactEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactSubject">Subject</label>
+                    <input type="text" id="contactSubject" name="contactSubject" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Message</label>
+                    <textarea id="contactMessage" name="contactMessage" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Experience Modal -->
+    <div id="experienceModal" class="experience-modal">
+        <div class="experience-modal-content">
+            <span class="close">&times;</span>
+            <h2 id="experienceModalTitle">Add New Experience</h2>
+            <form id="experienceForm" class="experience-form">
+                <div class="form-group">
+                    <label for="experienceTitle">Job Title *</label>
+                    <input type="text" id="experienceTitle" name="experienceTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="experienceCompany">Company *</label>
+                    <input type="text" id="experienceCompany" name="experienceCompany" required>
+                </div>
+                <div class="form-group">
+                    <label for="experienceDuration">Duration *</label>
+                    <input type="text" id="experienceDuration" name="experienceDuration" placeholder="e.g., Jan 2022 – Present" required>
+                </div>
+                <div class="form-group">
+                    <label for="experienceDescription">Description</label>
+                    <textarea id="experienceDescription" name="experienceDescription" placeholder="Brief description of your role and responsibilities"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Save Experience</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Education Modal -->
+    <div id="educationModal" class="education-modal">
+        <div class="education-modal-content">
+            <span class="close">&times;</span>
+            <h2 id="educationModalTitle">Add New Education</h2>
+            <form id="educationForm" class="education-form">
+                <div class="form-group">
+                    <label for="educationInstitution">Institution *</label>
+                    <input type="text" id="educationInstitution" name="educationInstitution" placeholder="e.g., Harvard University" required>
+                </div>
+                <div class="form-group">
+                    <label for="educationDegree">Degree *</label>
+                    <input type="text" id="educationDegree" name="educationDegree" placeholder="e.g., B.Sc. in Computer Science" required>
+                </div>
+                <div class="form-group">
+                    <label for="educationYears">Years *</label>
+                    <input type="text" id="educationYears" name="educationYears" placeholder="e.g., 2018 – 2022" required>
+                </div>
+                <div class="form-group">
+                    <label for="educationDescription">Description</label>
+                    <textarea id="educationDescription" name="educationDescription" placeholder="Brief description of your studies, achievements, or relevant coursework"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Save Education</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="project-modal">
+        <div class="project-modal-content">
+            <span class="close">&times;</span>
+            <h2 id="projectModalTitle">Add New Project</h2>
+            <form id="projectForm" class="project-form">
+                <div class="form-group">
+                    <label for="projectTitle">Project Title *</label>
+                    <input type="text" id="projectTitle" name="projectTitle" placeholder="e.g., Portfolio Website" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Description *</label>
+                    <textarea id="projectDescription" name="projectDescription" placeholder="Brief description of the project, technologies used, and your role" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="projectLink">Project Link</label>
+                    <input type="url" id="projectLink" name="projectLink" placeholder="e.g., https://github.com/username/project or https://project-demo.com">
+                </div>
+                <button type="submit" class="btn-primary">Save Project</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Recruiters Hub. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    
+    <!-- App Scripts -->
+    <!-- <script type="module" src="assets/js/firebase-config.js"></script> -->
+    <!-- <script type="module" src="assets/js/utils.js"></script> -->
+    <!-- <script type="module" src="assets/js/auth.js"></script> -->
+    <!-- <script type="module" src="assets/js/profile.js"></script> -->
+
+    
+
+     <script src="./authentication/auth.js"></script>
+     <script src="assets/js/user-settings.js"></script>
+     
+     <!-- Toast Notification -->
+     <div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+</body>
+</html> 

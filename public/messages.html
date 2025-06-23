@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - Recruiters Hub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="./assets/img/Untitled design.svg" alt="Recruiters Hub Logo">
+                <h1>Recruiters Hub</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="user-setting.html">Edit Profile</a>
+                <button type="button" onClick="logout()" id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="messages-container">
+            <div class="coming-soon-card">
+                <div class="coming-soon-content">
+                    <h1>Messages</h1>
+                    <div class="coming-soon-message">
+                        <h2>COMING SOON</h2>
+                        <p>We're working hard to bring you a great messaging experience. Stay tuned!</p>
+                    </div>
+                    <a href="dashboard.html" class="btn-primary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Recruiters Hub. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="./authentication/auth.js"></script>
+</body>
+</html> 

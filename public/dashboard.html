@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Recruiters Hub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="./assets/img/Untitled design.svg" alt="Recruiters Hub Logo">
+                <h1>Recruiters Hub</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="user-setting.html">Edit Profile</a>
+                <button type="button" onClick="logout()" id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="dashboard-container">
+            <aside class="sidebar">
+                <!-- <div class="user-info"> -->
+                    <!-- <div class="avatar"> -->
+                        <!-- <img id="userAvatar" src="assets/img/default-avatar.png" alt="User Avatar"> -->
+                    <!-- </div> -->
+                    <!-- <h3 id="userName">Loading...</h3> -->
+                    <!-- <p id="userRole">Loading...</p> -->
+                <!-- </div> -->
+                
+                <nav class="sidebar-nav">
+                    <a href="#overview" class="nav-item active" data-section="overview">Overview</a>
+                    <!-- <a href="#profile" class="nav-item" data-section="profile">Profile</a> -->
+                     <!-- if a request section will be added use the applications html tag and change the string application to request -->
+                    <!-- <a href="#applications" class="nav-item" data-section="applications">Applications</a> -->
+                    <a href="messages.html" class="nav-item">Messages</a>
+                    <a href="user-setting.html" class="nav-item">Settings</a>
+                </nav>
+            </aside>
+
+            <div class="main-content">
+                <!-- Overview Section -->
+                <section id="overview" class="dashboard-section active">
+                    <h2>Dashboard Overview</h2>
+
+                    <!-- trying to add profile pics here -->
+                     <div class="user-info">
+                    <div class="avatar">
+                        <img id="userAvatar" src="assets/img/default-avatar.png" alt="User Avatar">
+                    </div>
+                    <h3 id="userName">Loading...</h3>
+                    <p id="userRole">Loading...</p>
+                </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Profile Views</h3>
+                            <p id="profileViews">0</p>
+                        </div>
+                        <!-- <div class="stat-card"> -->
+                            <!-- <h3>Messages Received</h3> -->
+                            <!-- <p id="messagesReceived">0</p> -->
+                        <!-- </div> -->
+                        <!-- <div class="stat-card"> -->
+                            <!-- <h3>Applications</h3> -->
+                            <!-- <p id="applicationsCount">0</p> -->
+                        <!-- </div> -->
+                        <div class="stat-card">
+                            <h3>Profile Completion</h3>
+                            <p id="profileCompletion">0%</p>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div id="activityList">
+                            <p>No recent activity</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profile" class="dashboard-section">
+                    <h2>Profile Management</h2>
+                    <div class="profile-preview">
+                        <h3>Your Public Profile</h3>
+                        <div id="profilePreview">
+                            <!-- Profile preview will be loaded here -->
+                        </div>
+                        <a href="user-setting.html" class="btn-primary">Edit Profile</a>
+                    </div>
+                </section>
+
+                <!-- Applications Section -->
+                <section id="applications" class="dashboard-section">
+                    <h2>Job Applications</h2>
+                    <div id="applicationsList">
+                        <p>No applications yet</p>
+                    </div>
+                </section>
+
+                <!-- Messages Section -->
+                <section id="messages" class="dashboard-section">
+                    <h2>Messages</h2>
+                    <div id="messagesList">
+                        <p>No messages yet</p>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="dashboard-section">
+                    <h2>Account Settings</h2>
+                    <form id="settingsForm" class="settings-form">
+                        <div class="form-group">
+                            <label for="notifications">Email Notifications</label>
+                            <input type="checkbox" id="notifications" name="notifications" checked>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileVisibility">Profile Visibility</label>
+                            <select id="profileVisibility" name="profileVisibility">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Save Settings</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Recruiters Hub. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    
+    <!-- App Scripts -->
+    <!-- <script type="module" src="assets/js/firebase-config.js"></script> -->
+    <!-- <script type="module" src="assets/js/utils.js"></script> -->
+    <!-- <script type="module" src="assets/js/auth.js"></script> -->
+    <!-- <script type="module" src="assets/js/profile.js"></script> -->
+     <script src="./authentication/auth.js"></script>
+</body>
+</html> 
