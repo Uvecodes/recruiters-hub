@@ -779,10 +779,56 @@ function setupResumeInterface() {
     if (resumeLink) {
         resumeLink.addEventListener('click', function(e) {
             e.preventDefault();
-            openResumeFilePicker();
+            
+            // Check if resume exists - if yes, view it; if no, upload
+            if (currentResumeURL) {
+                viewResume();
+            } else {
+                openResumeFilePicker();
+            }
         });
     }
     console.log('Resume interface setup complete');
+}
+
+// Function to view resume in new tab
+async function viewResume() {
+    try {
+        // Check authentication
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            showToast('User not authenticated', 'error');
+            return;
+        }
+        
+        // Check if resume URL exists
+        if (!currentResumeURL) {
+            showToast('No resume found', 'error');
+            return;
+        }
+        
+        // Fetch the resume download URL from Firebase Storage
+        const storageRef = firebase.storage().ref();
+        const resumeRef = storageRef.child(`resumes/${user.uid}/latest-resume.pdf`);
+        
+        // Get the download URL
+        const downloadURL = await resumeRef.getDownloadURL();
+        
+        // Open resume in new tab
+        window.open(downloadURL, '_blank');
+        
+    } catch (error) {
+        console.error('Error accessing resume:', error);
+        showToast('Error accessing resume. Please try again.', 'error');
+        
+        // Revert button to "Upload Resume" on error
+        const resumeLink = document.getElementById('resumeLink');
+        if (resumeLink) {
+            resumeLink.textContent = 'Upload Resume';
+            currentResumeURL = '';
+            renderResumeSection();
+        }
+    }
 }
 
 // Open file picker for resume upload
@@ -843,12 +889,15 @@ async function uploadResume(file) {
         // Update current resume URL
         currentResumeURL = downloadURL;
         
-        // Update the link
+        // Update the link and re-render section to change button behavior
         if (resumeLink) {
             resumeLink.href = downloadURL;
             resumeLink.textContent = 'View Resume';
             resumeLink.style.pointerEvents = 'auto';
         }
+        
+        // Re-render the section to update button behavior
+        renderResumeSection();
         
         showToast("Resume uploaded successfully!", "success");
         console.log('Resume uploaded successfully:', downloadURL);
@@ -869,19 +918,74 @@ async function uploadResume(file) {
 // Render resume section
 function renderResumeSection() {
     const resumeLink = document.getElementById('resumeLink');
+    let deleteBtn = document.getElementById('deleteResumeBtn');
     if (!resumeLink) return;
-    
+    // Create delete button if not present
+    if (!deleteBtn) {
+        deleteBtn = document.createElement('button');
+        deleteBtn.id = 'deleteResumeBtn';
+        deleteBtn.textContent = 'Delete Resume';
+        deleteBtn.style.marginLeft = '12px';
+        // Custom styling for a destructive action
+        deleteBtn.style.background = '#e53e3e'; // red
+        deleteBtn.style.color = '#fff';
+        deleteBtn.style.border = 'none';
+        deleteBtn.style.borderRadius = '6px';
+        deleteBtn.style.padding = '6px 16px';
+        deleteBtn.style.fontWeight = 'bold';
+        deleteBtn.style.cursor = 'pointer';
+        deleteBtn.style.transition = 'background 0.2s';
+        deleteBtn.onmouseover = function() { deleteBtn.style.background = '#c53030'; };
+        deleteBtn.onmouseout = function() { deleteBtn.style.background = '#e53e3e'; };
+        resumeLink.parentNode.insertBefore(deleteBtn, resumeLink.nextSibling);
+    }
     if (currentResumeURL) {
-        // Resume exists - show "View Resume" link
+        // Resume exists - show "View Resume" link and enable delete
         resumeLink.href = currentResumeURL;
         resumeLink.textContent = 'View Resume';
         resumeLink.target = '_blank';
+        resumeLink.style.display = '';
+        deleteBtn.style.display = '';
+        deleteBtn.disabled = false;
+        resumeLink.disabled = false;
     } else {
-        // No resume - show "Upload Resume" link
+        // No resume - show "Upload Resume" link and hide delete
         resumeLink.href = '#';
         resumeLink.textContent = 'Upload Resume';
         resumeLink.target = '';
+        deleteBtn.style.display = 'none';
     }
+    
+    // Attach delete handler
+    deleteBtn.onclick = async function() {
+        // Confirmation popup before deletion
+        const confirmDelete = window.confirm('Are you sure you want to delete your resume? This action cannot be undone.');
+        if (!confirmDelete) {
+            deleteBtn.disabled = false;
+            resumeLink.disabled = false;
+            return;
+        }
+        // Disable both buttons
+        deleteBtn.disabled = true;
+        resumeLink.disabled = true;
+        try {
+            const user = firebase.auth().currentUser;
+            if (!user) throw new Error('User not authenticated');
+            // Delete from storage
+            const storageRef = firebase.storage().ref();
+            const resumeRef = storageRef.child(`resumes/${user.uid}/latest-resume.pdf`);
+            await resumeRef.delete();
+            // Remove from Firestore
+            await firebase.firestore().collection('users').doc(user.uid).update({ resumeURL: '' });
+            currentResumeURL = '';
+            renderResumeSection();
+            showToast('Resume deleted successfully.', 'success');
+        } catch (err) {
+            showToast('Error deleting resume: ' + (err.message || err), 'error');
+            deleteBtn.disabled = false;
+            resumeLink.disabled = false;
+        }
+    };
 }
 
 // Load user profile data from Firestore
