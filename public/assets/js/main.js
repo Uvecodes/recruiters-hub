@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Avatar update for dashboard
     if (window.location.pathname.includes('dashboard.html')) {
-        updateDashboardAvatar();
+        updateDashboardUserInfo();
     }
 });
 
@@ -360,22 +360,76 @@ window.main = {
     viewDeveloperProfile
 };
 
-// Update dashboard avatar from Firestore
-async function updateDashboardAvatar() {
+// Update dashboard user info from Firestore
+async function updateDashboardUserInfo() {
     try {
         // Ensure Firebase is initialized
         if (!firebase.apps.length) return;
+        
         const user = firebase.auth().currentUser;
         if (!user) return;
+        
         const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
-        let avatarURL = userDoc.exists && userDoc.data().avatarURL ? userDoc.data().avatarURL : 'assets/img/default-avatar.png';
-        const userAvatar = document.getElementById('userAvatar');
-        if (userAvatar) userAvatar.src = avatarURL;
-    } catch (error) {
-        if (typeof showToast === 'function') {
-            showToast('Could not load avatar', 'error');
+        
+        if (userDoc.exists) {
+            const userData = userDoc.data();
+            
+            // Update user name
+            const userName = document.getElementById('userName');
+            if (userName) {
+                userName.textContent = userData.name || userData.fullName || 'User';
+            }
+            
+            // Update user role
+            const userRole = document.getElementById('userRole');
+            if (userRole) {
+                userRole.textContent = userData.role || 'Developer';
+            }
+            
+            // Update user avatar
+            const userAvatar = document.getElementById('userAvatar');
+            if (userAvatar) {
+                const avatarURL = userData.avatarURL || userData.profilePictureURL || 'assets/img/default-avatar.png';
+                userAvatar.src = avatarURL;
+            }
         } else {
-            console.error('Could not load avatar');
+            // Set default values if user document doesn't exist
+            const userName = document.getElementById('userName');
+            if (userName) {
+                userName.textContent = 'User';
+            }
+            
+            const userRole = document.getElementById('userRole');
+            if (userRole) {
+                userRole.textContent = 'Developer';
+            }
+            
+            const userAvatar = document.getElementById('userAvatar');
+            if (userAvatar) {
+                userAvatar.src = 'assets/img/default-avatar.png';
+            }
+        }
+    } catch (error) {
+        console.error('Error loading user data:', error);
+        
+        // Set fallback values on error
+        const userName = document.getElementById('userName');
+        if (userName) {
+            userName.textContent = 'User';
+        }
+        
+        const userRole = document.getElementById('userRole');
+        if (userRole) {
+            userRole.textContent = 'Developer';
+        }
+        
+        const userAvatar = document.getElementById('userAvatar');
+        if (userAvatar) {
+            userAvatar.src = 'assets/img/default-avatar.png';
+        }
+        
+        if (typeof showToast === 'function') {
+            showToast('Could not load user data', 'error');
         }
     }
 } 

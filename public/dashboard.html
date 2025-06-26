@@ -14,7 +14,8 @@
                 <h1>Recruiters Hub</h1>
             </div>
             <div class="nav-links">
-                <a href="index.html">Home</a>
+                 <!-- commented some bital html code for user interface purposes possibility to un comment may come up -->
+                <!-- <a href="index.html">Home</a> -->
                 <a href="user-setting.html">Edit Profile</a>
                 <button type="button" onClick="logout()" id="logoutBtn" class="btn-secondary">Logout</button>
             </div>
@@ -24,13 +25,14 @@
     <main>
         <div class="dashboard-container">
             <aside class="sidebar">
-                <!-- <div class="user-info"> -->
-                    <!-- <div class="avatar"> -->
-                        <!-- <img id="userAvatar" src="assets/img/default-avatar.png" alt="User Avatar"> -->
-                    <!-- </div> -->
-                    <!-- <h3 id="userName">Loading...</h3> -->
-                    <!-- <p id="userRole">Loading...</p> -->
-                <!-- </div> -->
+                <div class="user-info">
+                    <div class="avatar">
+                        <img id="sideProfileAvatar" src="assets/img/default-avatar.png" alt="User Avatar">
+
+                    </div>
+                    <h3 id="sideProfileName">Loading...</h3>
+                    <p id="sideProfileTitle">Loading...</p>
+                </div>
                 
                 <nav class="sidebar-nav">
                     <a href="#overview" class="nav-item active" data-section="overview">Overview</a>
@@ -48,13 +50,13 @@
                     <h2>Dashboard Overview</h2>
 
                     <!-- trying to add profile pics here -->
-                     <div class="user-info">
-                    <div class="avatar">
-                        <img id="userAvatar" src="assets/img/default-avatar.png" alt="User Avatar">
+                    <div class="user-info">
+                      <div class="avatar">
+                        <img id="profileAvatar" src="assets/img/default-avatar.png" alt="User Avatar">
+                      </div>
+                       <h3 id="profileName">Loading...</h3>
+                       <p id="profileTitle">Loading...</p>
                     </div>
-                    <h3 id="userName">Loading...</h3>
-                    <p id="userRole">Loading...</p>
-                </div>
                     
                     <div class="stats-grid">
                         <div class="stat-card">
@@ -150,6 +152,7 @@
     <!-- <script type="module" src="assets/js/auth.js"></script> -->
     <!-- <script type="module" src="assets/js/profile.js"></script> -->
      <script src="./authentication/auth.js"></script>
+          <script src="assets/js/user-settings.js"></script>
     <script src="assets/js/main.js"></script>
 </body>
 </html> 

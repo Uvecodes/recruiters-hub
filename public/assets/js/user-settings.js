@@ -1030,6 +1030,12 @@ function populateProfileData(userData) {
         profileName.textContent = userData.name || 'No name provided';
     }
     
+    // adding profile name for side in dashboard html
+    const sideProfileName = document.getElementById('sideProfileName');
+    if (sideProfileName) {
+        sideProfileName.textContent = userData.name || 'No name provided';
+    }
+
     // Profile title/role
     const profileTitle = document.getElementById('profileTitle');
 
@@ -1046,6 +1052,11 @@ function populateProfileData(userData) {
        const rawRole = userData.role || 'fullstack';
     if (profileTitle) {
         profileTitle.textContent = roleMap[rawRole] || 'fullstack Developer';
+    }
+    // adding profile title for side in dashboard html
+    const sideProfileTitle = document.getElementById('sideProfileTitle');
+    if (sideProfileTitle) {
+        sideProfileTitle.textContent = roleMap[rawRole] || 'fullstack Developer'
     }
     
     // Profile location
@@ -1074,6 +1085,21 @@ function populateProfileData(userData) {
         }
     }
     
+        // adding profile avatar for side in dashboard html
+            const sideProfileAvatar = document.getElementById('sideProfileAvatar');
+    if (sideProfileAvatar) {
+        if (userData.avatarURL) {
+            sideProfileAvatar.src = userData.avatarURL;
+            currentAvatarURL = userData.avatarURL;
+        } else {
+            // Use default avatar if no profile picture
+            sideProfileAvatar.src = 'assets/img/default-avatar.png';
+            currentAvatarURL = '';
+        }
+    }
+
+
+
     // Skills list - load and render skills
     if (userData.skills && Array.isArray(userData.skills)) {
         currentSkills = [...userData.skills]; // Copy the array
