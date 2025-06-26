@@ -926,8 +926,6 @@ function populateProfileData(userData) {
         profileName.textContent = userData.name || 'No name provided';
     }
     
-
-
     // Profile title/role
     const profileTitle = document.getElementById('profileTitle');
 
@@ -946,7 +944,6 @@ function populateProfileData(userData) {
         profileTitle.textContent = roleMap[rawRole] || 'fullstack Developer';
     }
     
-
     // Profile location
     const profileLocation = document.getElementById('profileLocation');
     if (profileLocation) {
@@ -1247,23 +1244,108 @@ function setupSocialLinksInterface() {
 function setupAvatarUpload() {
     const avatarUploadBtn = document.getElementById('avatarUploadBtn');
     const avatarUpload = document.getElementById('avatarUpload');
-    
     if (avatarUploadBtn && avatarUpload) {
-        // Trigger file input when button is clicked
         avatarUploadBtn.addEventListener('click', function() {
             avatarUpload.click();
         });
-        
-        // Handle file selection
-        avatarUpload.addEventListener('change', function(e) {
+        avatarUpload.addEventListener('change', async function(e) {
             const file = e.target.files[0];
             if (file) {
-                handleAvatarUpload(file);
+                try {
+                    const croppedBlob = await showCropperModal(file);
+                    await handleAvatarUpload(croppedBlob);
+                } catch (err) {
+                    if (err !== 'cancelled') showToast('Failed to crop image', 'error');
+                }
             }
         });
     }
-    
     console.log('Avatar upload interface setup complete');
+}
+
+// Show CropperJS modal and return a Promise that resolves with the cropped Blob
+function showCropperModal(file) {
+    return new Promise((resolve, reject) => {
+        ensureCropperModal();
+        const modal = document.getElementById('cropperModal');
+        const img = document.getElementById('cropperImage');
+        const cancelBtn = document.getElementById('cropperCancelBtn');
+        const confirmBtn = document.getElementById('cropperConfirmBtn');
+        modal.style.display = 'block';
+        // Load image
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            // Wait for CropperJS to be loaded
+            if (window.Cropper) {
+                if (img.cropperInstance) img.cropperInstance.destroy();
+                img.cropperInstance = new Cropper(img, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    autoCropArea: 1,
+                    movable: true,
+                    zoomable: true,
+                    scalable: true,
+                    rotatable: false
+                });
+            } else {
+                // Wait for script to load
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js';
+                script.onload = () => {
+                    if (img.cropperInstance) img.cropperInstance.destroy();
+                    img.cropperInstance = new Cropper(img, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        autoCropArea: 1,
+                        movable: true,
+                        zoomable: true,
+                        scalable: true,
+                        rotatable: false
+                    });
+                };
+                document.body.appendChild(script);
+            }
+        };
+        reader.readAsDataURL(file);
+        // Cancel
+        cancelBtn.onclick = () => {
+            if (img.cropperInstance) img.cropperInstance.destroy();
+            modal.style.display = 'none';
+            reject('cancelled');
+        };
+        // Confirm
+        confirmBtn.onclick = () => {
+            if (!img.cropperInstance) return;
+            img.cropperInstance.getCroppedCanvas({width:400,height:400}).toBlob(blob => {
+                img.cropperInstance.destroy();
+                modal.style.display = 'none';
+                resolve(blob);
+            }, 'image/jpeg', 0.95);
+        };
+    });
+}
+
+// Add CropperJS modal HTML to the page (once)
+function ensureCropperModal() {
+    if (document.getElementById('cropperModal')) return;
+    const modal = document.createElement('div');
+    modal.id = 'cropperModal';
+    modal.style.display = 'none';
+    modal.innerHTML = `
+      <div id="cropperModalBackdrop" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9998;"></div>
+      <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:24px;border-radius:12px;z-index:9999;min-width:320px;max-width:90vw;">
+        <h3 style="margin-top:0;">Crop your profile picture</h3>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css'/>
+        <img id="cropperImage" style="max-width:100%;max-height:50vh;display:block;margin:0 auto 16px;"/>
+        <div style="text-align:right;">
+          <button id="cropperCancelBtn" style="margin-right:8px;">Cancel</button>
+          <button id="cropperConfirmBtn">Crop & Upload</button>
+        </div>
+      </div>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js'></script>
+    `;
+    document.body.appendChild(modal);
 }
 
 // Handle avatar upload
