@@ -3,6 +3,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize main application
     initializeApp();
+    
+    // Avatar update for dashboard
+    if (window.location.pathname.includes('dashboard.html')) {
+        updateDashboardAvatar();
+    }
 });
 
 // Initialize main application
@@ -353,4 +358,24 @@ function viewDeveloperProfile(developerId) {
 // Export main functions
 window.main = {
     viewDeveloperProfile
-}; 
+};
+
+// Update dashboard avatar from Firestore
+async function updateDashboardAvatar() {
+    try {
+        // Ensure Firebase is initialized
+        if (!firebase.apps.length) return;
+        const user = firebase.auth().currentUser;
+        if (!user) return;
+        const userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+        let avatarURL = userDoc.exists && userDoc.data().avatarURL ? userDoc.data().avatarURL : 'assets/img/default-avatar.png';
+        const userAvatar = document.getElementById('userAvatar');
+        if (userAvatar) userAvatar.src = avatarURL;
+    } catch (error) {
+        if (typeof showToast === 'function') {
+            showToast('Could not load avatar', 'error');
+        } else {
+            console.error('Could not load avatar');
+        }
+    }
+} 

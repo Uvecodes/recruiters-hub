@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Settings - Recruiters Hub</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+   
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="assets/img/Untitled design.svg" alt="Recruiters Hub Logo">
+                <h1>Recruiters Hub</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <button type="button" onClick="logout()" id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="settings-container">
+            <div class="settings-section">
+                <h2>Account Settings</h2>
+                
+                <!-- Email Section -->
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" id="userEmail" readonly>
+                </div>
+                
+                <!-- Change Password Section -->
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" placeholder="Enter new password" minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password" minlength="6">
+                </div>
+                
+                <button type="button" id="updatePasswordBtn" class="btn-primary" disabled>Update Password</button>
+                
+                <!-- Delete Account Section -->
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0;">
+                    <h3 style="color: #dc2626; margin-bottom: 1rem;">Danger Zone</h3>
+                    <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">
+                        Once you delete your account, there is no going back. Please be certain.
+                    </p>
+                    <button type="button" id="deleteAccountBtn" class="btn-danger">Delete My Account</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Delete Account Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Delete Account</h3>
+            <p>Are you sure you want to delete your account? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button type="button" id="confirmDeleteBtn" class="btn-danger">Yes, Delete My Account</button>
+                <button type="button" id="cancelDeleteBtn" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 Recruiters Hub. All rights reserved.</p>
+    </footer>
+    
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+    <script src="authentication/auth.js"></script>
+    <div id="toast" class="toast hidden" role="alert" aria-live="polite"></div>
+    
+    <script>
+        // Initialize settings page
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSettings();
+        });
+        
+        function initializeSettings() {
+            // Check authentication state
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    loadUserData(user);
+                    setupEventListeners();
+                } else {
+                    // Redirect to login if not authenticated
+                    window.location.href = 'authentication/login.html';
+                }
+            });
+        }
+        
+        function loadUserData(user) {
+            // Load user email
+            const userEmail = document.getElementById('userEmail');
+            if (userEmail) {
+                userEmail.value = user.email;
+            }
+        }
+        
+        function setupEventListeners() {
+            // Password validation
+            const newPassword = document.getElementById('newPassword');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const updatePasswordBtn = document.getElementById('updatePasswordBtn');
+            
+            function validatePasswords() {
+                const newPass = newPassword.value;
+                const confirmPass = confirmPassword.value;
+                const isValid = newPass.length >= 6 && newPass === confirmPass;
+                updatePasswordBtn.disabled = !isValid;
+            }
+            
+            newPassword.addEventListener('input', validatePasswords);
+            confirmPassword.addEventListener('input', validatePasswords);
+            
+            // Update password
+            updatePasswordBtn.addEventListener('click', updatePassword);
+            
+            // Delete account
+            const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+            deleteAccountBtn.addEventListener('click', showDeleteModal);
+            
+            // Modal controls
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+            const deleteModal = document.getElementById('deleteModal');
+            
+            confirmDeleteBtn.addEventListener('click', deleteAccount);
+            cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+            
+            // Close modal when clicking outside
+            deleteModal.addEventListener('click', function(e) {
+                if (e.target === deleteModal) {
+                    hideDeleteModal();
+                }
+            });
+        }
+        
+        async function updatePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const updatePasswordBtn = document.getElementById('updatePasswordBtn');
+            
+            if (newPassword !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            try {
+                // Add loading state
+                updatePasswordBtn.textContent = 'Updating...';
+                updatePasswordBtn.disabled = true;
+                
+                const user = firebase.auth().currentUser;
+                await user.updatePassword(newPassword);
+                
+                showToast('Password updated successfully!', 'success');
+                
+                // Clear form
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                updatePasswordBtn.disabled = true;
+                
+            } catch (error) {
+                showToast(error.message, 'error');
+            } finally {
+                updatePasswordBtn.textContent = 'Update Password';
+                updatePasswordBtn.disabled = false;
+            }
+        }
+        
+        function showDeleteModal() {
+            const deleteModal = document.getElementById('deleteModal');
+            deleteModal.style.display = 'block';
+        }
+        
+        function hideDeleteModal() {
+            const deleteModal = document.getElementById('deleteModal');
+            deleteModal.style.display = 'none';
+        }
+        
+        async function deleteAccount() {
+            try {
+                const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                confirmDeleteBtn.textContent = 'Deleting...';
+                confirmDeleteBtn.disabled = true;
+                
+                const user = firebase.auth().currentUser;
+                
+                // Delete user account
+                await user.delete();
+                
+                showToast('Account deleted successfully', 'success');
+                
+                // Redirect to home page after a short delay
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+                
+            } catch (error) {
+                showToast(error.message, 'error');
+                const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                confirmDeleteBtn.textContent = 'Yes, Delete My Account';
+                confirmDeleteBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html> 

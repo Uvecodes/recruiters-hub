@@ -39,6 +39,32 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 // console.log({auth, db});
+
+// ✅ Forgot Password Function
+async function forgotPassword() {
+    // Create a clean modal for email input
+    const email = prompt("Please enter your email address to reset your password:");
+    
+    if (!email) {
+        showToast("Email is required", "error");
+        return;
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showToast("Please enter a valid email address", "error");
+        return;
+    }
+    
+    try {
+        await auth.sendPasswordResetEmail(email);
+        showToast("Password reset email sent!", "success");
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+}
+
 // ✅ Register with extra fields
 async function register() {
   const name = document.getElementById("fullName").value.trim();
@@ -108,6 +134,17 @@ firebase.auth().onAuthStateChanged(function (user) {
       window.location.href = "index.html";
     }
   }
+});
+
+// 📧 Add event listener for forgot password link
+document.addEventListener('DOMContentLoaded', function() {
+    const forgotPasswordLink = document.getElementById('forgotPassword');
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            forgotPassword();
+        });
+    }
 });
 
 

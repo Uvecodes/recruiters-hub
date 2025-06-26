@@ -926,12 +926,27 @@ function populateProfileData(userData) {
         profileName.textContent = userData.name || 'No name provided';
     }
     
+
+
     // Profile title/role
     const profileTitle = document.getElementById('profileTitle');
+
+    // adding role map as suggested by gpt to make role user friendly and not what the machine reads
+     const roleMap = {
+        frontend: "Frontend Developer",
+        backend: "Backend Developer",
+        fullstack: "Full Stack Developer",
+        mobile: "Mobile Developer",
+        devops: "DevOps Engineer",
+        data: "Data Scientist",
+        other: "Other"
+       };
+       const rawRole = userData.role || 'fullstack';
     if (profileTitle) {
-        profileTitle.textContent = userData.role || 'Developer';
+        profileTitle.textContent = roleMap[rawRole] || 'fullstack Developer';
     }
     
+
     // Profile location
     const profileLocation = document.getElementById('profileLocation');
     if (profileLocation) {
