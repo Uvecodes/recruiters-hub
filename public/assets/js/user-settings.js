@@ -1348,6 +1348,8 @@ function setupSocialLinksInterface() {
 function setupAvatarUpload() {
     const avatarUploadBtn = document.getElementById('avatarUploadBtn');
     const avatarUpload = document.getElementById('avatarUpload');
+    const profileAvatar = document.getElementById('profileAvatar');
+    
     if (avatarUploadBtn && avatarUpload) {
         avatarUploadBtn.addEventListener('click', function() {
             avatarUpload.click();
@@ -1364,6 +1366,15 @@ function setupAvatarUpload() {
             }
         });
     }
+    
+    // Add click handler for profile avatar modal
+    if (profileAvatar) {
+        profileAvatar.style.cursor = 'pointer';
+        profileAvatar.addEventListener('click', function() {
+            openAvatarModal(this.src);
+        });
+    }
+    
     console.log('Avatar upload interface setup complete');
 }
 
@@ -1442,9 +1453,9 @@ function ensureCropperModal() {
         <h3 style="margin-top:0;">Crop your profile picture</h3>
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css'/>
         <img id="cropperImage" style="max-width:100%;max-height:50vh;display:block;margin:0 auto 16px;"/>
-        <div style="text-align:right;">
-          <button id="cropperCancelBtn" style="margin-right:8px;">Cancel</button>
-          <button id="cropperConfirmBtn">Crop & Upload</button>
+        <div class="crop-modal-buttons">
+          <button class="cancel-btn" id="cropperCancelBtn">Cancel</button>
+          <button class="upload-btn" id="cropperConfirmBtn">Crop & Upload</button>
         </div>
       </div>
       <script src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js'></script>
@@ -1744,6 +1755,146 @@ async function handleContactFormSubmission() {
     } catch (error) {
         console.error('Error sending contact message:', error);
         showToast('Error sending message. Please try again.', 'error');
+    }
+}
+
+// Open avatar modal with full-size image
+function openAvatarModal(imageSrc) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('avatarModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'avatarModal';
+        modal.innerHTML = `
+            <div class="avatar-modal-overlay">
+                <div class="avatar-modal-content">
+                    <button class="avatar-modal-close">&times;</button>
+                    <img class="avatar-modal-image" src="" alt="Profile Picture">
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        // Add event listeners
+        const closeBtn = modal.querySelector('.avatar-modal-close');
+        const overlay = modal.querySelector('.avatar-modal-overlay');
+        
+        closeBtn.addEventListener('click', closeAvatarModal);
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                closeAvatarModal();
+            }
+        });
+        
+        // Add CSS styles
+        if (!document.getElementById('avatarModalStyles')) {
+            const styles = document.createElement('style');
+            styles.id = 'avatarModalStyles';
+            styles.textContent = `
+                #avatarModal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 10000;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.3s ease;
+                }
+                
+                #avatarModal.show {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                
+                .avatar-modal-overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                }
+                
+                .avatar-modal-content {
+                    position: relative;
+                    max-width: 90%;
+                    max-height: 90%;
+                }
+                
+                .avatar-modal-image {
+                    width: 100%;
+                    height: auto;
+                    max-width: 100%;
+                    max-height: 90vh;
+                    object-fit: contain;
+                    border-radius: 8px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                }
+                
+                .avatar-modal-close {
+                    position: absolute;
+                    top: -40px;
+                    right: 0;
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 30px;
+                    cursor: pointer;
+                    padding: 0;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    background: rgba(0, 0, 0, 0.5);
+                    transition: background 0.2s ease;
+                }
+                
+                .avatar-modal-close:hover {
+                    background: rgba(0, 0, 0, 0.8);
+                }
+                
+                @media (max-width: 768px) {
+                    .avatar-modal-overlay {
+                        padding: 10px;
+                    }
+                    
+                    .avatar-modal-close {
+                        top: -35px;
+                        right: 0;
+                        font-size: 24px;
+                        width: 35px;
+                        height: 35px;
+                    }
+                }
+            `;
+            document.head.appendChild(styles);
+        }
+    }
+    
+    // Set image source and show modal
+    const modalImage = modal.querySelector('.avatar-modal-image');
+    modalImage.src = imageSrc;
+    modal.classList.add('show');
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+// Close avatar modal
+function closeAvatarModal() {
+    const modal = document.getElementById('avatarModal');
+    if (modal) {
+        modal.classList.remove('show');
+        // Re-enable body scroll
+        document.body.style.overflow = '';
     }
 }
 

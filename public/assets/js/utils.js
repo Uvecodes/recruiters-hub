@@ -3,26 +3,36 @@
 // Show notification
 function showNotification(message, type = 'info') {
     // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
+    const existingNotifications = document.querySelectorAll('.toast');
     existingNotifications.forEach(notification => notification.remove());
     
     // Create notification element
     const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
+    notification.className = `toast`;
     notification.innerHTML = `
-        <span>${message}</span>
-        <button onclick="this.parentElement.remove()">&times;</button>
+        ${message}
+        <span class="close-btn" onclick="this.parentElement.remove()">&times;</span>
     `;
     
     // Add to page
     document.body.appendChild(notification);
     
-    // Auto remove after 5 seconds
+    // Trigger slide-in animation
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+    
+    // Auto remove after 3 seconds
     setTimeout(() => {
         if (notification.parentElement) {
-            notification.remove();
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 400);
         }
-    }, 5000);
+    }, 3000);
 }
 
 // Set loading state for buttons

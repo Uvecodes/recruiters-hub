@@ -1700,6 +1700,47 @@ footer {
     margin-right: 0.75rem;
 }
 
+/* Mobile responsive for contact modal */
+@media (max-width: 768px) {
+    #contactModal .modal-content {
+        width: 95%;
+        margin: 1rem auto;
+        padding: 1.5rem;
+    }
+    
+    #contactForm input,
+    #contactForm textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+        min-height: 44px;
+    }
+    
+    #contactForm textarea {
+        min-height: 100px;
+    }
+    
+    #contactForm button[type="submit"] {
+        min-height: 44px;
+        font-size: 16px;
+    }
+    
+    /* Contact button mobile layout */
+    .profile-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: center;
+    }
+    
+    #contactBtn {
+        margin-right: 0;
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    #saveBtn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
 
 /* adding gpt style for user settings page */
 /* Layout container */
@@ -1785,281 +1826,76 @@ footer {
   background-color: #a71d2a;
 }
 
-/* Toast Notifications (Reusable) */
+/* Toast Container */
 .toast {
   position: fixed;
-  top: 20px;
+  bottom: 20px;
   right: 20px;
-  min-width: 250px;
-  background-color: #333;
-  color: #fff;
-  padding: 1rem 1.5rem;
+  background-color: #4CAF50; /* green for success */
+  color: white;
+  padding: 12px 16px;
   border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  max-width: 280px;
   z-index: 9999;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  animation: slideIn 0.4s ease;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.4s ease;
 }
 
-.toast.success {
-  background-color: #28a745;
-}
-
-.toast.error {
-  background-color: #dc3545;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
- 
-/* Mobile responsive for contact modal */
-@media (max-width: 768px) {
-    #contactModal .modal-content {
-        width: 95%;
-        margin: 1rem auto;
-        padding: 1.5rem;
-    }
-    
-    #contactForm input,
-    #contactForm textarea {
-        font-size: 16px; /* Prevents zoom on iOS */
-        min-height: 44px;
-    }
-    
-    #contactForm textarea {
-        min-height: 100px;
-    }
-    
-    #contactForm button[type="submit"] {
-        min-height: 44px;
-        font-size: 16px;
-    }
-    
-    /* Contact button mobile layout */
-    .profile-actions {
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: center;
-    }
-    
-    #contactBtn {
-        margin-right: 0;
-        width: 100%;
-        max-width: 300px;
-    }
-    
-    #saveBtn {
-        width: 100%;
-        max-width: 300px;
-    }
-}
-
-/* Toast Notification System */
-.toast {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 10000;
-    max-width: 350px;
-    word-wrap: break-word;
-    transition: all 0.3s ease;
-    transform: translateX(100%);
-    opacity: 0;
-}
-
+/* Toast Visible State */
 .toast.show {
-    transform: translateX(0);
-    opacity: 1;
+  opacity: 1;
+  transform: translateX(0);
 }
 
-.toast.hidden {
-    display: none;
+/* Optional Close Button */
+.toast .close-btn {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 16px;
+  cursor: pointer;
 }
 
-.toast.success {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    border-left: 4px solid #047857;
+/* Crop Modal Buttons */
+.crop-modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.toast.error {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    color: white;
-    border-left: 4px solid #b91c1c;
+.crop-modal-buttons button {
+  padding: 0.5rem 1.2rem;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-.toast.info {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    border-left: 4px solid #1d4ed8;
+/* Cancel Button */
+.crop-modal-buttons .cancel-btn {
+  background-color: #f44336;
+  color: white;
 }
 
-/* Toast animation keyframes */
-@keyframes toastSlideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+.crop-modal-buttons .cancel-btn:hover {
+  background-color: #d32f2f;
+  transform: scale(1.03);
 }
 
-@keyframes toastSlideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
+/* Upload Button */
+.crop-modal-buttons .upload-btn {
+  background-color: #4CAF50;
+  color: white;
 }
 
-/* Mobile responsive toast */
-@media (max-width: 768px) {
-    .toast {
-        bottom: 10px;
-        right: 10px;
-        left: 10px;
-        max-width: none;
-        transform: translateY(100%);
-    }
-    
-    .toast.show {
-        transform: translateY(0);
-    }
-    
-    @keyframes toastSlideIn {
-        from {
-            transform: translateY(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes toastSlideOut {
-        from {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateY(100%);
-            opacity: 0;
-        }
-    }
+.crop-modal-buttons .upload-btn:hover {
+  background-color: #388e3c;
+  transform: scale(1.03);
 }
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .toast {
-        border: 2px solid currentColor;
-    }
-    
-    .toast.success {
-        background: #059669;
-        border-color: #047857;
-    }
-    
-    .toast.error {
-        background: #dc2626;
-        border-color: #b91c1c;
-    }
-    
-    .toast.info {
-        background: #2563eb;
-        border-color: #1d4ed8;
-    }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-    .toast {
-        transition: none;
-    }
-    
-    @keyframes toastSlideIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-    
-    @keyframes toastSlideOut {
-        from {
-            opacity: 1;
-        }
-        to {
-            opacity: 0;
-        }
-    }
-}
-
-/* Authentication Toast Styles (for login/signup pages) */
-.toast {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #333;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease-in-out;
-    z-index: 9999;
-    max-width: 350px;
-    word-wrap: break-word;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.toast.success {
-    background-color: #2ecc71;
-}
-
-.toast.error {
-    background-color: #e74c3c;
-}
-
-.toast.hidden {
-    display: none;
-}
-
-/* Mobile responsive for auth toast */
-@media (max-width: 768px) {
-    .toast {
-        bottom: 20px;
-        right: 20px;
-        left: 20px;
-        max-width: none;
-    }
-} 
-
-
 
 /* new comment */
