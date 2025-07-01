@@ -433,3 +433,65 @@ async function updateDashboardUserInfo() {
         }
     }
 } 
+
+// typewriter effect testing
+ // Simple test to verify typewriter works
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, testing typewriter...');
+            const testElement = document.getElementById('typewriter-text');
+            if (testElement) {
+                console.log('Found typewriter element:', testElement);
+                console.log('Element text:', testElement.textContent);
+            } else {
+                console.log('Typewriter element NOT found!');
+            }
+        });
+
+
+        // Standalone typewriter effect that works independently
+        document.addEventListener('DOMContentLoaded', function() {
+            const typewriterElement = document.getElementById('typewriter-text');
+            
+            if (!typewriterElement) {
+                console.log('Typewriter element not found in standalone script');
+                return;
+            }
+            
+            const originalText = typewriterElement.textContent;
+            typewriterElement.textContent = '';
+            typewriterElement.style.borderRight = '2px solid #4a5568';
+            
+            let currentIndex = 0;
+            let isDeleting = false;
+            
+            function typeWriter() {
+                if (!isDeleting) {
+                    // Typing phase
+                    if (currentIndex < originalText.length) {
+                        typewriterElement.textContent += originalText.charAt(currentIndex);
+                        currentIndex++;
+                        setTimeout(typeWriter, 100);
+                    } else {
+                        // Finished typing, wait then start deleting
+                        setTimeout(() => {
+                            isDeleting = true;
+                            typeWriter();
+                        }, 2000);
+                    }
+                } else {
+                    // Deleting phase
+                    if (currentIndex > 0) {
+                        typewriterElement.textContent = originalText.substring(0, currentIndex - 1);
+                        currentIndex--;
+                        setTimeout(typeWriter, 50);
+                    } else {
+                        // Finished deleting, wait then start typing again
+                        isDeleting = false;
+                        setTimeout(typeWriter, 1000);
+                    }
+                }
+            }
+            
+            // Start the typewriter effect after a delay
+            setTimeout(typeWriter, 1500);
+        });

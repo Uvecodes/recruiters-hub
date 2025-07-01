@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Profile (View Only) - Recruiters Hub</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Firebase Config -->
+    <script src="assets/js/firebase-config.js"></script>
+    <!-- firebase analytics -->
+    
+
+    
+    <!-- Custom Scripts -->
+    <script src="assets/js/profile-2.js" defer></script>
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <img src="./assets/img/Untitled design.svg" alt="Recruiters Hub">
+                <h1>Recruiters Hub</h1>
+            </a>
+            <a href="index.html" class="back-btn">← Back to Search</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="settings-container">
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-container">
+            <div class="loading-spinner"></div>
+            <h2>Loading Profile...</h2>
+            <p>Please wait while we fetch the developer's information.</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="error-container" style="display: none;">
+            <div class="error-icon">⚠️</div>
+            <h2>Profile Not Found</h2>
+            <p>The developer profile you're looking for doesn't exist or has been removed.</p>
+            <a href="index.html" class="back-btn" style="margin-top: 1rem; display: inline-block;">Return to Search</a>
+        </div>
+
+        <!-- Profile Content -->
+        <div id="profileContent" style="display: none;">
+            <!-- Profile Header -->
+            <div class="settings-header">
+                <div class="settings-avatar">
+                    <img id="profileAvatar" src="assets/img/default-avatar.png" alt="Developer Avatar">
+                </div>
+                <div class="settings-info">
+                    <h1 id="profileName">Loading...</h1>
+                    <div class="role" id="profileRole">Loading...</div>
+                    <div class="meta">
+                        <div class="meta-item">Availability: <span id="availabilityBadge">Loading...</span></div>
+                        <div class="meta-item">Pay Rate: <span id="payRate">Loading...</span></div>
+                    </div>
+                    <a id="resumeBtn" class="resume-link" href="#" target="_blank" style="display:none;">📄 View Resume</a>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="section">
+                <div class="section-title">About</div>
+                <div class="about-text" id="aboutText">Loading...</div>
+            </div>
+
+            <!-- Skills -->
+            <div class="section">
+                <div class="section-title">Skills</div>
+                <div class="skills-grid" id="skillsGrid">
+                    <span class="empty-state">Loading skills...</span>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="section">
+                <div class="section-title">Education</div>
+                <div class="education-list" id="educationList">
+                    <span class="empty-state">Loading education...</span>
+                </div>
+            </div>
+
+            <!-- Projects -->
+            <div class="section">
+                <div class="section-title">Projects</div>
+                <div class="projects-list" id="projectsList">
+                    <span class="empty-state">Loading projects...</span>
+                </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="section">
+                <div class="section-title">Social Links</div>
+                <div class="social-links" id="socialLinks">
+                    <span class="empty-state">Loading social links...</span>
+                </div>
+            </div>
+        </div>
+    </main>
+     <!-- <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script> -->
+</body>
+</html> 
