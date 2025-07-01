@@ -75,4 +75,4 @@ tmp/
 temp/
 
 # Firebase config (if contains sensitive data)
-firebase-config.js 
+# firebase-config.js 
