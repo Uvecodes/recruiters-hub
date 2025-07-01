@@ -2109,6 +2109,31 @@ footer {
     background: #004182;
     box-shadow: 0 2px 8px rgba(10,102,194,0.13);
 }
+.settings-info .contact-btn {
+    background: #28a745;
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem;
+}
+.settings-info .contact-btn:hover {
+    background: #1e7e34;
+    box-shadow: 0 2px 8px rgba(40,167,69,0.13);
+}
+.settings-info .contact-btn.disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+.settings-info .contact-btn.disabled:hover {
+    background: #6c757d;
+    box-shadow: none;
+}
 .section {
     margin-bottom: 2.5rem;
 }
@@ -2214,6 +2239,13 @@ footer {
     }
     .settings-info h1 {
         font-size: 1.3rem;
+    }
+    .settings-info .contact-btn {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
     }
 }
 

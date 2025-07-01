@@ -164,6 +164,26 @@ function renderBasicInfo(userData) {
     } else {
         resumeBtn.style.display = 'none';
     }
+    
+    // Contact button
+    const contactBtn = document.getElementById('contactBtn');
+    const email = userData.contact?.email || userData.email;
+    
+    if (email && email.trim()) {
+        contactBtn.href = `mailto:${email}`;
+        contactBtn.style.display = 'inline-flex';
+        contactBtn.textContent = '📧 Contact Developer';
+        contactBtn.classList.remove('disabled');
+    } else {
+        contactBtn.style.display = 'inline-flex';
+        contactBtn.href = '#';
+        contactBtn.textContent = '📧 Email not available';
+        contactBtn.classList.add('disabled');
+        contactBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Email address not available for this developer.');
+        });
+    }
 }
 
 // Render about section
