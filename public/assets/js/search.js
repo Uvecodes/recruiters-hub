@@ -1,38 +1,27 @@
-// Search functionality for finding developers
-
-// Wait for DOM and Firebase to be ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Small delay to ensure firebase-config.js has loaded
     setTimeout(initializeFirebase, 100);
 });
 
-// Initialize Firebase and Firestore
 function initializeFirebase() {
     try {
-        // Check if Firebase is defined
         if (typeof firebase === 'undefined') {
             console.error('❌ Firebase is not defined. Make sure firebase-config.js is loaded before search.js');
             console.error('📁 Check that firebase-config.js exists and is properly referenced in HTML');
             return;
         }
 
-        // Check if Firebase is initialized
         if (!firebase.apps || !firebase.apps.length) {
             console.error('❌ Firebase is not initialized. Make sure firebase-config.js initializes Firebase');
             console.error('🔧 Check firebase-config.js for proper Firebase.initializeApp() call');
             return;
         }
 
-        // Initialize Firestore
         const db = firebase.firestore();
-        
-        // Export Firestore instance globally
         window.db = db;
         
         console.log('✅ Firebase and Firestore initialized successfully');
         console.log('📊 Firestore instance available as window.db');
         
-        // Initialize search functionality after Firebase is ready
         initializeSearch();
         
     } catch (error) {
@@ -44,62 +33,46 @@ function initializeFirebase() {
     }
 }
 
-// Initialize search functionality
 function initializeSearch() {
     console.log('🔍 Initializing search functionality...');
     
     try {
-    // Add event listeners for search keyword buttons
-    const searchKeywordButtons = document.querySelectorAll('.search-keyword');
-    console.log(`📝 Found ${searchKeywordButtons.length} search keyword buttons`);
+        const searchKeywordButtons = document.querySelectorAll('.search-keyword');
+        console.log(`📝 Found ${searchKeywordButtons.length} search keyword buttons`);
 
-    searchKeywordButtons.forEach(button => {
-        button.addEventListener('click', async function () {
-           const keyword = (this.getAttribute('data-keyword') || this.innerText.trim()).toLowerCase();
-            const keywordLower = keyword.toLowerCase();
+        searchKeywordButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const keyword = (this.getAttribute('data-keyword') || this.innerText.trim()).toLowerCase();
+                console.log(`🔍 Search keyword clicked: "${keyword}"`);
 
-            console.log(`🔍 Search keyword clicked: "${keyword}"`);
-
-            try {
-                displaySearchResults([], 'Loading...');
-                const results = await searchDevelopersByKeyword(keyword.toLowerCase());
-
-                displaySearchResults(results, keyword);
-            } catch (error) {
-                console.log('❌ Error handling keyword button search:', error);
-                displaySearchResults([], keyword, error.message);
-            }
+                try {
+                    displaySearchResults([], 'Loading...');
+                    const results = await searchDevelopersByKeyword(keyword);
+                    displaySearchResults(results, keyword);
+                } catch (error) {
+                    console.log('❌ Error handling keyword button search:', error);
+                    displaySearchResults([], keyword, error.message);
+                }
+            });
         });
-    });
+    } catch (error) {
+        console.error('❌ Error initializing search keyword buttons:', error);
+    }
 
-    // ✅ GPT solution integrated above
-} catch (error) {
-    console.error('❌ Error initializing search keyword buttons:', error);
-}
-
-    try{    
-        // Add event listeners for keyword buttons (.keyword-btn)
+    try {    
         const keywordButtons = document.querySelectorAll('.keyword-btn');
         console.log(`🔘 Found ${keywordButtons.length} keyword buttons`);
         
         keywordButtons.forEach(button => {
             button.addEventListener('click', async function() {
-                // Get keyword from data-keyword attribute or text content
                 const keyword = this.getAttribute('data-keyword') || this.innerText.trim();
                 console.log(`🔍 Keyword button clicked: "${keyword}"`);
                 console.log(`[DEBUG] Raw keyword from button:`, JSON.stringify(keyword));
 
-                
                 try {
-                    // Show loading state
                     displaySearchResults([], 'Loading...');
-                    
-                    // Call searchDevelopersByKeyword function
                     const results = await searchDevelopersByKeyword(keyword);
-                    
-                    // Display the results
                     displaySearchResults(results, keyword);
-                    
                 } catch (error) {
                     console.error('❌ Error handling keyword button click:', error);
                     displaySearchResults([], null, error.message);
@@ -107,7 +80,6 @@ function initializeSearch() {
             });
         });
         
-        // Initialize main search input functionality
         initializeMainSearch();
         
         console.log('✅ Search functionality initialized successfully');
@@ -117,7 +89,6 @@ function initializeSearch() {
     }
 }
 
-// Initialize main search input functionality
 function initializeMainSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
@@ -134,29 +105,23 @@ function initializeMainSearch() {
     
     console.log('🔍 Initializing main search input functionality');
     
-    // Add click event listener to search button
     searchBtn.addEventListener('click', function() {
         performMainSearch();
     });
     
-    // Add Enter key event listener to search input
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault(); // Prevent form submission if inside a form
+            e.preventDefault();
             performMainSearch();
         }
     });
     
-    // Add input event listener for real-time search (optional)
     let searchTimeout;
     searchInput.addEventListener('input', function() {
-        // Clear previous timeout
         clearTimeout(searchTimeout);
-        
-        // Set new timeout for debounced search (1 second delay)
         searchTimeout = setTimeout(() => {
             const keyword = this.value.trim();
-            if (keyword.length >= 2) { // Only search if 2+ characters
+            if (keyword.length >= 2) {
                 performMainSearch();
             }
         }, 1000);
@@ -165,10 +130,8 @@ function initializeMainSearch() {
     console.log('✅ Main search input functionality initialized');
 }
 
-// Track last searched keyword to prevent redundant searches
 let lastSearchedKeyword = '';
 
-// Perform main search functionality
 async function performMainSearch() {
     const searchInput = document.getElementById('searchInput');
     
@@ -177,7 +140,6 @@ async function performMainSearch() {
         return;
     }
     
-    // Get and validate keyword
     const keyword = searchInput.value.trim();
     
     if (!keyword) {
@@ -185,7 +147,6 @@ async function performMainSearch() {
         return;
     }
     
-    // Check for redundant search
     if (keyword.toLowerCase() === lastSearchedKeyword.toLowerCase()) {
         console.log('⚠️ Same keyword searched, skipping redundant search');
         return;
@@ -194,10 +155,7 @@ async function performMainSearch() {
     console.log(`🔍 Performing main search for keyword: "${keyword}"`);
     
     try {
-        // Update last searched keyword
         lastSearchedKeyword = keyword;
-        
-        // Show loading state
         renderSearchResults([]);
         const searchResults = document.getElementById('searchResults');
         if (searchResults) {
@@ -210,22 +168,14 @@ async function performMainSearch() {
             `;
         }
         
-        // Call searchDevelopersByKeyword function
-       const results = await searchDevelopersByKeyword(keyword.toLowerCase());
-
-        
-        // Render results using renderSearchResults
+        const results = await searchDevelopersByKeyword(keyword);
         renderSearchResults(results);
-        
-        // Update search input placeholder to show last search
         searchInput.placeholder = `Last search: "${keyword}"`;
         
         console.log(`✅ Main search completed. Found ${results.length} results`);
         
     } catch (error) {
         console.error('❌ Error performing main search:', error);
-        
-        // Show error state
         const searchResults = document.getElementById('searchResults');
         if (searchResults) {
             searchResults.innerHTML = `
@@ -236,13 +186,10 @@ async function performMainSearch() {
                 </div>
             `;
         }
-        
-        // Reset last searched keyword on error
         lastSearchedKeyword = '';
     }
 }
 
-// Filter profiles based on keyword
 async function filterProfiles(keyword) {
     const searchResults = document.getElementById('developerResults');
     
@@ -253,18 +200,15 @@ async function filterProfiles(keyword) {
     
     console.log(`🔍 Filtering profiles for keyword: "${keyword}"`);
     
-    // Show loading indicator
     searchResults.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">Searching...</div>';
     
     try {
-        // Check if Firestore is available
         if (!window.db) {
             throw new Error('Firestore is not initialized');
         }
         
         console.log('📊 Querying Firestore users collection...');
         
-        // Query the users collection
         const usersRef = window.db.collection('users');
         const querySnapshot = await usersRef.get();
         
@@ -272,12 +216,10 @@ async function filterProfiles(keyword) {
         
         const matchingUsers = [];
         
-        // Check each user for keyword matches
         querySnapshot.forEach((doc) => {
             const userData = doc.data();
             const userId = doc.id;
             
-            // Check for case-insensitive partial matches in skills, role, and about
             const keywordLower = keyword.toLowerCase();
             const skillsMatch = (userData.skills || []).some(skill => 
                 skill.toLowerCase().includes(keywordLower)
@@ -295,18 +237,13 @@ async function filterProfiles(keyword) {
         
         console.log(`✅ Found ${matchingUsers.length} matching users`);
         
-        // Handle no matches found
         if (matchingUsers.length === 0) {
             searchResults.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">No matching profiles found</div>';
             return;
         }
         
-        // Generate HTML for matching users
         const resultsHTML = matchingUsers.map(user => {
-            // Get top 3 skills
             const topSkills = (user.skills || []).slice(0, 3);
-            
-            // Truncate about section to 100 characters
             const aboutSnippet = (user.about || 'No description available').length > 100 
                 ? (user.about || 'No description available').substring(0, 100) + '...'
                 : (user.about || 'No description available');
@@ -338,7 +275,6 @@ async function filterProfiles(keyword) {
             `;
         }).join('');
         
-        // Inject results into searchResults container
         searchResults.innerHTML = resultsHTML;
         console.log('✅ Search results displayed successfully');
         
@@ -352,7 +288,6 @@ async function filterProfiles(keyword) {
     }
 }
 
-// Helper function to get Firestore instance
 function getFirestore() {
     if (!window.db) {
         console.error('❌ Firestore is not initialized');
@@ -361,18 +296,17 @@ function getFirestore() {
     return window.db;
 }
 
-// Search developers by keyword
+// grok recommendation to improve search functionality function
+
 async function searchDevelopersByKeyword(keyword) {
     console.log(`🔍 Searching for developers with keyword: "${keyword}"`);
     
-    // Get search results container
     const searchResults = document.getElementById('searchResults');
     if (!searchResults) {
         console.error('❌ Search results container (#searchResults) not found');
         throw new Error('Search results container not found');
     }
     
-    // Reset and show loading state
     searchResults.innerHTML = `
         <div class="search-loading">
             <div class="loader"></div>
@@ -381,38 +315,42 @@ async function searchDevelopersByKeyword(keyword) {
     `;
     
     try {
-        // Check if Firestore is available
         if (!window.db) {
             throw new Error('Firestore is not initialized');
         }
         
         console.log('📊 Querying Firestore users collection...');
         
-        // Query the users collection
         const usersRef = window.db.collection('users');
         const querySnapshot = await usersRef.get();
         
         console.log(`📋 Found ${querySnapshot.size} total users in collection`);
         
-        // Filter users based on keyword
         const matchingUsers = [];
+        // Normalize and split keywords
+        const keywords = keyword.toLowerCase().trim().split(/\s+/).filter(word => word.length > 0);
+        console.log(`🔍 Keywords after splitting:`, keywords);
         
         querySnapshot.forEach(doc => {
             const userData = doc.data();
             const userId = doc.id;
             
-            // Check if user data matches the keyword
-            const keywordLower = keyword.toLowerCase();
+            // Combine all searchable fields, handling null/undefined
             const role = (userData.role || '').toLowerCase();
-            const skills = (userData.skills || []).map(skill => skill.toLowerCase()).join(' ');
+            const skills = Array.isArray(userData.skills) ? userData.skills.map(skill => (skill || '').toLowerCase()).join(' ') : '';
             const about = (userData.about || '').toLowerCase();
-
+            const combinedText = `${role} ${skills} ${about}`.trim();
             
-            // Check if keyword matches role, skills, or about
-            if (role.includes(keywordLower) || 
-                skills.includes(keywordLower) || 
-                about.includes(keywordLower)) {
-                
+            console.log(`📝 Checking user ${userId}, combined text:`, combinedText);
+            
+            // Check if ANY keyword is present in combined text
+            const matchAnyWord = keywords.some(word => {
+                const isMatch = combinedText.includes(word);
+                console.log(`🔍 Checking word "${word}" in user ${userId}: ${isMatch}`);
+                return isMatch;
+            });
+            
+            if (matchAnyWord) {
                 console.log(`✅ User ${userId} matches keyword "${keyword}"`);
                 matchingUsers.push({
                     id: userId,
@@ -423,7 +361,6 @@ async function searchDevelopersByKeyword(keyword) {
         
         console.log(`🎯 Found ${matchingUsers.length} users matching keyword "${keyword}"`);
         
-        // Handle empty results
         if (matchingUsers.length === 0) {
             searchResults.innerHTML = `
                 <div class="no-results">
@@ -439,8 +376,6 @@ async function searchDevelopersByKeyword(keyword) {
         
     } catch (error) {
         console.error('❌ Error searching developers:', error);
-        
-        // Show error message
         searchResults.innerHTML = `
             <div class="error-message">
                 <h3>❌ Search Error</h3>
@@ -451,12 +386,9 @@ async function searchDevelopersByKeyword(keyword) {
                 </button>
             </div>
         `;
-        
         throw error;
     }
 }
-
-// Display search results in the searchResults container
 function displaySearchResults(developers, keyword, errorMessage = null) {
     const searchResults = document.getElementById('searchResults');
     
@@ -466,7 +398,6 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
     }
     
     try {
-        // Handle error state
         if (errorMessage) {
             searchResults.innerHTML = `
                 <div class="error-message">
@@ -478,7 +409,6 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
             return;
         }
         
-        // Handle loading state
         if (keyword === 'Loading...') {
             searchResults.innerHTML = `
                 <div class="search-loading">
@@ -489,7 +419,6 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
             return;
         }
         
-        // Handle no results
         if (!developers || developers.length === 0) {
             searchResults.innerHTML = `
                 <div class="no-results">
@@ -503,12 +432,8 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
         
         console.log(`📊 Displaying ${developers.length} search results for keyword: "${keyword}"`);
         
-        // Generate HTML for matching developers
         const resultsHTML = developers.map(developer => {
-            // Get top 3 skills
             const topSkills = (developer.skills || []).slice(0, 3);
-            
-            // Truncate about section to 120 characters
             const aboutSnippet = (developer.about || 'No description available').length > 120 
                 ? (developer.about || 'No description available').substring(0, 120) + '...'
                 : (developer.about || 'No description available');
@@ -540,7 +465,6 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
             `;
         }).join('');
         
-        // Create the complete results HTML with header
         const completeResultsHTML = `
             <div style="margin-bottom: 2rem;">
                 <h2 style="color: #333; margin-bottom: 0.5rem;">Search Results</h2>
@@ -551,7 +475,6 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
             </div>
         `;
         
-        // Inject results into searchResults container
         searchResults.innerHTML = completeResultsHTML;
         console.log('✅ Search results displayed successfully');
         
@@ -569,7 +492,6 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
     }
 }
 
-// Render search results in the searchResults container
 function renderSearchResults(results) {
     const searchResults = document.getElementById('searchResults');
     
@@ -579,10 +501,8 @@ function renderSearchResults(results) {
     }
     
     try {
-        // Clear any previous content
         searchResults.innerHTML = '';
         
-        // Handle no results
         if (!results || results.length === 0) {
             searchResults.innerHTML = `
                 <div class="no-results">
@@ -597,18 +517,15 @@ function renderSearchResults(results) {
         
         console.log(`📊 Rendering ${results.length} search results`);
         
-        // Create results container
         const resultsContainer = document.createElement('div');
         resultsContainer.className = 'search-results-container';
         resultsContainer.style.cssText = 'display: grid; gap: 1.5rem; padding: 1rem 0;';
         
-        // Render each developer card
         results.forEach(developer => {
             const developerCard = createDeveloperCard(developer);
             resultsContainer.appendChild(developerCard);
         });
         
-        // Add results header
         const resultsHeader = document.createElement('div');
         resultsHeader.style.cssText = 'margin-bottom: 2rem; padding: 1rem 0; border-bottom: 1px solid #eee;';
         resultsHeader.innerHTML = `
@@ -616,7 +533,6 @@ function renderSearchResults(results) {
             <p style="margin: 0; color: #666;">Found ${results.length} developer${results.length === 1 ? '' : 's'}</p>
         `;
         
-        // Append header and results to container
         searchResults.appendChild(resultsHeader);
         searchResults.appendChild(resultsContainer);
         
@@ -636,7 +552,6 @@ function renderSearchResults(results) {
     }
 }
 
-// Create individual developer card
 function createDeveloperCard(developer) {
     const card = document.createElement('div');
     card.className = 'search-card';
@@ -650,7 +565,6 @@ function createDeveloperCard(developer) {
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     `;
     
-    // Add hover effect
     card.addEventListener('mouseenter', () => {
         card.style.transform = 'translateY(-2px)';
         card.style.boxShadow = '0 4px 16px rgba(0,0,0,0.1)';
@@ -661,17 +575,14 @@ function createDeveloperCard(developer) {
         card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
     });
     
-    // Get developer data with fallbacks
     const name = developer.fullName || developer.name || 'Unknown Developer';
     const role = developer.role || developer.title || 'Developer';
     const avatar = developer.avatarURL || developer.profilePictureURL || 'assets/img/default-avatar.png';
     const skills = developer.skills || [];
     const about = developer.about || 'No description available';
     
-    // Truncate about text to 120 characters
     const aboutSnippet = about.length > 120 ? about.substring(0, 120) + '...' : about;
     
-    // Create skills badges (limit to 4 skills)
     const skillsHTML = skills.slice(0, 4).map(skill => 
         `<span class="skill-badge" style="
             background: #f3f6f9; 
@@ -685,7 +596,6 @@ function createDeveloperCard(developer) {
         ">${skill}</span>`
     ).join('');
     
-    // Add "more skills" indicator if there are more than 4 skills
     const moreSkillsIndicator = skills.length > 4 ? 
         `<span style="color: #5e6e7e; font-size: 0.8rem; margin-left: 0.5rem;">+${skills.length - 4} more</span>` : '';
     
@@ -716,7 +626,6 @@ function createDeveloperCard(developer) {
     return card;
 }
 
-// Export functions globally
 window.search = {
     filterProfiles,
     getFirestore,
@@ -729,7 +638,6 @@ window.search = {
     initializeMainSearch
 };
 
-// Add CSS animation for loading spinner and search styles
 const style = document.createElement('style');
 style.textContent = `
     @keyframes spin {
@@ -737,7 +645,6 @@ style.textContent = `
         100% { transform: rotate(360deg); }
     }
     
-    /* Search Loading Styles */
     .search-loading {
         text-align: center;
         padding: 3rem 2rem;
@@ -766,7 +673,6 @@ style.textContent = `
         font-size: 0.95rem;
     }
     
-    /* No Results Styles */
     .no-results {
         text-align: center;
         padding: 3rem 2rem;
@@ -796,7 +702,6 @@ style.textContent = `
         color: #868e96;
     }
     
-    /* Error Message Styles */
     .error-message {
         text-align: center;
         padding: 2rem;
@@ -827,7 +732,6 @@ style.textContent = `
         color: #856404;
     }
     
-    /* Retry Button Styles */
     .retry-btn {
         background: #dc3545;
         color: white;
@@ -853,20 +757,17 @@ style.textContent = `
         transform: translateY(0);
     }
     
-    /* Search Results Grid */
     .search-results-container {
         display: grid;
         gap: 1.5rem;
         padding: 1rem 0;
     }
     
-    /* Developer Card Hover Effects */
     .search-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
     
-    /* LinkedIn-style Profile Cards */
     .profile-card {
         background: white;
         border-radius: 10px;
@@ -882,7 +783,6 @@ style.textContent = `
         box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
     
-    /* LinkedIn-style Button */
     .btn-primary {
         background: #0a66c2 !important;
         color: white !important;
@@ -902,7 +802,6 @@ style.textContent = `
         transform: none !important;
     }
     
-    /* LinkedIn-style Skill Tags */
     .skill-tag, .skill-badge {
         background: #f3f6f9 !important;
         color: #3a4f66 !important;
@@ -914,7 +813,6 @@ style.textContent = `
         font-weight: 500 !important;
     }
     
-    /* Responsive Design */
     @media (max-width: 768px) {
         .search-loading,
         .no-results,
@@ -942,4 +840,4 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-console.log('📁 search.js loaded successfully'); 
+console.log('📁 search.js loaded successfully');

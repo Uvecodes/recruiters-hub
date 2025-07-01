@@ -76,3 +76,5 @@ temp/
 
 # Firebase config (if contains sensitive data)
 # firebase-config.js 
+# js files to ignore
+search2.js
