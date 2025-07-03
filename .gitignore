@@ -78,3 +78,7 @@ temp/
 # firebase-config.js 
 # js files to ignore
 search2.js
+# css files to ignore
+style2.css
+style3.css
+style4.css

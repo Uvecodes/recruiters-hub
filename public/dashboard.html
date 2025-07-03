@@ -47,15 +47,9 @@
             <div class="main-content">
                 <!-- Overview Section -->
                 <section id="overview" class="dashboard-section active">
-                    <h2>Dashboard Overview</h2>
-
-                    <!-- trying to add profile pics here -->
-                    <div class="user-info">
-                      <div class="avatar">
-                        <img id="profileAvatar" src="assets/img/default-avatar.png" alt="User Avatar">
-                      </div>
-                       <h3 id="profileName">Loading...</h3>
-                       <p id="profileTitle">Loading...</p>
+                    <div class="dashboard-header">
+                        <h2>Dashboard Overview</h2>
+                        <p>Welcome back! Here's what's happening with your profile.</p>
                     </div>
                     
                     <div class="stats-grid">
@@ -63,73 +57,95 @@
                             <h3>Profile Views</h3>
                             <p id="profileViews">0</p>
                         </div>
-                        <!-- <div class="stat-card"> -->
-                            <!-- <h3>Messages Received</h3> -->
-                            <!-- <p id="messagesReceived">0</p> -->
-                        <!-- </div> -->
-                        <!-- <div class="stat-card"> -->
-                            <!-- <h3>Applications</h3> -->
-                            <!-- <p id="applicationsCount">0</p> -->
-                        <!-- </div> -->
                         <div class="stat-card">
                             <h3>Profile Completion</h3>
                             <p id="profileCompletion">0%</p>
                         </div>
                     </div>
 
-                    <div class="recent-activity">
-                        <h3>Recent Activity</h3>
-                        <div id="activityList">
-                            <p>No recent activity</p>
+                    <div class="dashboard-content">
+                        <div class="recent-activity">
+                            <h3>Recent Activity</h3>
+                            <div id="activityList" class="activity-list">
+                                <div class="empty-state">
+                                    <p>No recent activity</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- Profile Section -->
                 <section id="profile" class="dashboard-section">
-                    <h2>Profile Management</h2>
-                    <div class="profile-preview">
-                        <h3>Your Public Profile</h3>
-                        <div id="profilePreview">
-                            <!-- Profile preview will be loaded here -->
+                    <div class="dashboard-header">
+                        <h2>Profile Management</h2>
+                        <p>Manage your public profile and visibility settings.</p>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="profile-preview">
+                            <h3>Your Public Profile</h3>
+                            <div id="profilePreview" class="profile-preview-content">
+                                <!-- Profile preview will be loaded here -->
+                            </div>
+                            <a href="user-setting.html" class="btn-primary">Edit Profile</a>
                         </div>
-                        <a href="user-setting.html" class="btn-primary">Edit Profile</a>
                     </div>
                 </section>
 
                 <!-- Applications Section -->
                 <section id="applications" class="dashboard-section">
-                    <h2>Job Applications</h2>
-                    <div id="applicationsList">
-                        <p>No applications yet</p>
+                    <div class="dashboard-header">
+                        <h2>Job Applications</h2>
+                        <p>Track your job applications and responses.</p>
+                    </div>
+                    <div class="dashboard-content">
+                        <div id="applicationsList" class="applications-list">
+                            <div class="empty-state">
+                                <p>No applications yet</p>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
                 <!-- Messages Section -->
                 <section id="messages" class="dashboard-section">
-                    <h2>Messages</h2>
-                    <div id="messagesList">
-                        <p>No messages yet</p>
+                    <div class="dashboard-header">
+                        <h2>Messages</h2>
+                        <p>View and manage your messages from recruiters.</p>
+                    </div>
+                    <div class="dashboard-content">
+                        <div id="messagesList" class="messages-list">
+                            <div class="empty-state">
+                                <p>No messages yet</p>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
                 <!-- Settings Section -->
                 <section id="settings" class="dashboard-section">
-                    <h2>Account Settings</h2>
-                    <form id="settingsForm" class="settings-form">
-                        <div class="form-group">
-                            <label for="notifications">Email Notifications</label>
-                            <input type="checkbox" id="notifications" name="notifications" checked>
-                        </div>
-                        <div class="form-group">
-                            <label for="profileVisibility">Profile Visibility</label>
-                            <select id="profileVisibility" name="profileVisibility">
-                                <option value="public">Public</option>
-                                <option value="private">Private</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn-primary">Save Settings</button>
-                    </form>
+                    <div class="dashboard-header">
+                        <h2>Account Settings</h2>
+                        <p>Manage your account preferences and privacy settings.</p>
+                    </div>
+                    <div class="dashboard-content">
+                        <form id="settingsForm" class="settings-form">
+                            <div class="form-group">
+                                <label for="notifications" class="checkbox-label">
+                                    <input type="checkbox" id="notifications" name="notifications" checked>
+                                    Email Notifications
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="profileVisibility">Profile Visibility</label>
+                                <select id="profileVisibility" name="profileVisibility">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-primary">Save Settings</button>
+                        </form>
+                    </div>
                 </section>
             </div>
         </div>
