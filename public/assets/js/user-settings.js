@@ -54,7 +54,7 @@ function initializeUserSettings() {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
             // User is logged in, load their profile data
-            console.log('User is authenticated:', user.email);
+            // console.log('User is authenticated:', user.email);
             loadUserProfile(user.uid);
             setupSaveButton(user.uid);
             setupSkillsInterface();
@@ -69,7 +69,7 @@ function initializeUserSettings() {
             setupContactModal();
         } else {
             // User is not logged in, redirect to index.html
-            console.log('User is not authenticated, redirecting to index.html');
+            // console.log('User is not authenticated, redirecting to index.html');
             window.location.href = 'index.html';
         }
     });
@@ -167,7 +167,7 @@ function saveProjectFromModal() {
     // Close modal
     closeProjectModal();
     
-    console.log('Project saved:', project);
+    // console.log('Project saved:', project);
 }
 
 // Delete project
@@ -175,7 +175,7 @@ function deleteProject(index) {
     if (confirm('Are you sure you want to delete this project?')) {
         currentProjects.splice(index, 1);
         renderProjectList();
-        console.log('Project deleted at index:', index);
+        // console.log('Project deleted at index:', index);
     }
 }
 
@@ -304,7 +304,7 @@ function saveEducationFromModal() {
     // Close modal
     closeEducationModal();
     
-    console.log('Education saved:', education);
+    // console.log('Education saved:', education);
 }
 
 // Delete education
@@ -312,7 +312,7 @@ function deleteEducation(index) {
     if (confirm('Are you sure you want to delete this education entry?')) {
         currentEducation.splice(index, 1);
         renderEducationList();
-        console.log('Education deleted at index:', index);
+        // console.log('Education deleted at index:', index);
     }
 }
 
@@ -442,7 +442,7 @@ function saveExperienceFromModal() {
     // Close modal
     closeExperienceModal();
     
-    console.log('Experience saved:', experience);
+    // console.log('Experience saved:', experience);
 }
 
 // Delete experience
@@ -450,7 +450,7 @@ function deleteExperience(index) {
     if (confirm('Are you sure you want to delete this experience?')) {
         currentExperiences.splice(index, 1);
         renderExperienceList();
-        console.log('Experience deleted at index:', index);
+        // console.log('Experience deleted at index:', index);
     }
 }
 
@@ -530,14 +530,14 @@ function addNewSkill() {
     // Clear input
     newSkillInput.value = '';
     
-    console.log('Skill added:', newSkill);
+    // console.log('Skill added:', newSkill);
 }
 
 // Remove skill from the list
 function removeSkill(skillToRemove) {
     currentSkills = currentSkills.filter(skill => skill !== skillToRemove);
     renderSkillsList();
-    console.log('Skill removed:', skillToRemove);
+    // console.log('Skill removed:', skillToRemove);
 }
 
 // Render skills list
@@ -628,7 +628,7 @@ async function saveAboutSection(userId) {
             about: aboutValue
         });
         
-        console.log('About section saved successfully');
+        // console.log('About section saved successfully');
         
     } catch (error) {
         console.error('Error saving about section:', error);
@@ -644,7 +644,7 @@ async function saveSkillsSection(userId) {
             skills: currentSkills
         });
         
-        console.log('Skills section saved successfully');
+        // console.log('Skills section saved successfully');
         
     } catch (error) {
         console.error('Error saving skills section:', error);
@@ -660,7 +660,7 @@ async function saveExperienceSection(userId) {
             experience: currentExperiences
         });
         
-        console.log('Experience section saved successfully');
+        // console.log('Experience section saved successfully');
         
     } catch (error) {
         console.error('Error saving experience section:', error);
@@ -676,7 +676,7 @@ async function saveEducationSection(userId) {
             education: currentEducation
         });
         
-        console.log('Education section saved successfully');
+        // console.log('Education section saved successfully');
         
     } catch (error) {
         console.error('Error saving education section:', error);
@@ -693,7 +693,7 @@ async function saveProjectSection(userId) {
         });
         
         showToast("Projects section updated!", "success");
-        console.log('Project section saved successfully');
+        // console.log('Project section saved successfully');
         
     } catch (error) {
         console.error('Error saving project section:', error);
@@ -717,7 +717,7 @@ async function saveContactSection(userId) {
             contact: currentContact
         });
         
-        console.log('Contact section saved successfully');
+        // console.log('Contact section saved successfully');
         
     } catch (error) {
         console.error('Error saving contact section:', error);
@@ -741,7 +741,7 @@ async function saveAvailabilitySection(userId) {
             availability: currentAvailability
         });
         
-        console.log('Availability section saved successfully');
+        // console.log('Availability section saved successfully');
         
     } catch (error) {
         console.error('Error saving availability section:', error);
@@ -765,7 +765,7 @@ async function saveSocialLinksSection(userId) {
             socialLinks: currentSocialLinks
         });
         
-        console.log('Social links section saved successfully');
+        // console.log('Social links section saved successfully');
         
     } catch (error) {
         console.error('Error saving social links section:', error);
@@ -788,7 +788,7 @@ function setupResumeInterface() {
             }
         });
     }
-    console.log('Resume interface setup complete');
+    // console.log('Resume interface setup complete');
 }
 
 // Function to view resume in new tab
@@ -900,7 +900,7 @@ async function uploadResume(file) {
         renderResumeSection();
         
         showToast("Resume uploaded successfully!", "success");
-        console.log('Resume uploaded successfully:', downloadURL);
+        // console.log('Resume uploaded successfully:', downloadURL);
         
     } catch (error) {
         console.error('Error uploading resume:', error);
@@ -991,19 +991,19 @@ function renderResumeSection() {
 // Load user profile data from Firestore
 async function loadUserProfile(userId) {
     try {
-        console.log('Loading profile data for user:', userId);
+        // console.log('Loading profile data for user:', userId);
         
         // Get user document from Firestore
         const userDoc = await firebase.firestore().collection('users').doc(userId).get();
         
         if (userDoc.exists) {
             const userData = userDoc.data();
-            console.log('User data loaded:', userData);
+            // console.log('User data loaded:', userData);
             
             // Populate profile elements with Firestore data
             populateProfileData(userData);
         } else {
-            console.log('No user document found');
+            // console.log('No user document found');
             // Handle case where user document doesn't exist
             showDefaultProfile();
         }
@@ -1298,13 +1298,13 @@ function showErrorState() {
 // Setup contact interface
 function setupContactInterface() {
     // Contact interface will be populated when data is loaded
-    console.log('Contact interface setup complete');
+    // console.log('Contact interface setup complete');
 }
 
 // Setup availability interface
 function setupAvailabilityInterface() {
     // Availability interface will be populated when data is loaded
-    console.log('Availability interface setup complete');
+    // console.log('Availability interface setup complete');
 }
 
 // Render contact information section
@@ -1367,7 +1367,7 @@ function renderAvailabilitySection() {
 // Setup social links interface
 function setupSocialLinksInterface() {
     // Social links interface will be populated when data is loaded
-    console.log('Social links interface setup complete');
+    // console.log('Social links interface setup complete');
 }
 
 // Setup avatar upload interface
@@ -1401,7 +1401,7 @@ function setupAvatarUpload() {
         });
     }
     
-    console.log('Avatar upload interface setup complete');
+    // console.log('Avatar upload interface setup complete');
 }
 
 // Show CropperJS modal and return a Promise that resolves with the cropped Blob
@@ -1539,7 +1539,7 @@ async function handleAvatarUpload(file) {
         }
         
         showToast("Avatar updated!", "success");
-        console.log('Avatar uploaded successfully:', downloadURL);
+        // console.log('Avatar uploaded successfully:', downloadURL);
         
     } catch (error) {
         console.error('Error uploading avatar:', error);
@@ -1706,7 +1706,7 @@ function setupContactModal() {
         });
     }
     
-    console.log('Contact modal interface setup complete');
+    // console.log('Contact modal interface setup complete');
 }
 
 // Open contact modal
@@ -1776,7 +1776,7 @@ async function handleContactFormSubmission() {
         // Close modal and reset form
         closeContactModal();
         
-        console.log('Contact message saved successfully:', messageData);
+        // console.log('Contact message saved successfully:', messageData);
         
     } catch (error) {
         console.error('Error sending contact message:', error);

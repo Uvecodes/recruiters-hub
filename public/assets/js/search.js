@@ -19,8 +19,8 @@ function initializeFirebase() {
         const db = firebase.firestore();
         window.db = db;
         
-        console.log('✅ Firebase and Firestore initialized successfully');
-        console.log('📊 Firestore instance available as window.db');
+        // console.log('✅ Firebase and Firestore initialized successfully');
+        // console.log('📊 Firestore instance available as window.db');
         
         initializeSearch();
         
@@ -34,23 +34,23 @@ function initializeFirebase() {
 }
 
 function initializeSearch() {
-    console.log('🔍 Initializing search functionality...');
+    // console.log('🔍 Initializing search functionality...');
     
     try {
         const searchKeywordButtons = document.querySelectorAll('.search-keyword');
-        console.log(`📝 Found ${searchKeywordButtons.length} search keyword buttons`);
+        // console.log(`📝 Found ${searchKeywordButtons.length} search keyword buttons`);
 
         searchKeywordButtons.forEach(button => {
             button.addEventListener('click', async function () {
                 const keyword = (this.getAttribute('data-keyword') || this.innerText.trim()).toLowerCase();
-                console.log(`🔍 Search keyword clicked: "${keyword}"`);
+                // console.log(`🔍 Search keyword clicked: "${keyword}"`);
 
                 try {
                     displaySearchResults([], 'Loading...');
                     const results = await searchDevelopersByKeyword(keyword);
                     displaySearchResults(results, keyword);
                 } catch (error) {
-                    console.log('❌ Error handling keyword button search:', error);
+                    // console.log('❌ Error handling keyword button search:', error);
                     displaySearchResults([], keyword, error.message);
                 }
             });
@@ -61,13 +61,13 @@ function initializeSearch() {
 
     try {    
         const keywordButtons = document.querySelectorAll('.keyword-btn');
-        console.log(`🔘 Found ${keywordButtons.length} keyword buttons`);
+        // console.log(`🔘 Found ${keywordButtons.length} keyword buttons`);
         
         keywordButtons.forEach(button => {
             button.addEventListener('click', async function() {
                 const keyword = this.getAttribute('data-keyword') || this.innerText.trim();
-                console.log(`🔍 Keyword button clicked: "${keyword}"`);
-                console.log(`[DEBUG] Raw keyword from button:`, JSON.stringify(keyword));
+                // console.log(`🔍 Keyword button clicked: "${keyword}"`);
+                // console.log(`[DEBUG] Raw keyword from button:`, JSON.stringify(keyword));
 
                 try {
                     displaySearchResults([], 'Loading...');
@@ -82,7 +82,7 @@ function initializeSearch() {
         
         initializeMainSearch();
         
-        console.log('✅ Search functionality initialized successfully');
+        // console.log('✅ Search functionality initialized successfully');
         
     } catch (error) {
         console.error('❌ Error initializing search functionality:', error);
@@ -103,7 +103,7 @@ function initializeMainSearch() {
         return;
     }
     
-    console.log('🔍 Initializing main search input functionality');
+    // console.log('🔍 Initializing main search input functionality');
     
     searchBtn.addEventListener('click', function() {
         performMainSearch();
@@ -127,7 +127,7 @@ function initializeMainSearch() {
         }, 1000);
     });
     
-    console.log('✅ Main search input functionality initialized');
+    // console.log('✅ Main search input functionality initialized');
 }
 
 let lastSearchedKeyword = '';
@@ -143,16 +143,16 @@ async function performMainSearch() {
     const keyword = searchInput.value.trim();
     
     if (!keyword) {
-        console.log('⚠️ Search input is empty');
+        // console.log('⚠️ Search input is empty');
         return;
     }
     
     if (keyword.toLowerCase() === lastSearchedKeyword.toLowerCase()) {
-        console.log('⚠️ Same keyword searched, skipping redundant search');
+        // console.log('⚠️ Same keyword searched, skipping redundant search');
         return;
     }
     
-    console.log(`🔍 Performing main search for keyword: "${keyword}"`);
+    // console.log(`🔍 Performing main search for keyword: "${keyword}"`);
     
     try {
         lastSearchedKeyword = keyword;
@@ -172,7 +172,7 @@ async function performMainSearch() {
         renderSearchResults(results);
         searchInput.placeholder = `Last search: "${keyword}"`;
         
-        console.log(`✅ Main search completed. Found ${results.length} results`);
+        // console.log(`✅ Main search completed. Found ${results.length} results`);
         
     } catch (error) {
         console.error('❌ Error performing main search:', error);
@@ -198,7 +198,7 @@ async function filterProfiles(keyword) {
         return;
     }
     
-    console.log(`🔍 Filtering profiles for keyword: "${keyword}"`);
+    // console.log(`🔍 Filtering profiles for keyword: "${keyword}"`);
     
     searchResults.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">Searching...</div>';
     
@@ -207,12 +207,12 @@ async function filterProfiles(keyword) {
             throw new Error('Firestore is not initialized');
         }
         
-        console.log('📊 Querying Firestore users collection...');
+        // console.log('📊 Querying Firestore users collection...');
         
         const usersRef = window.db.collection('users');
         const querySnapshot = await usersRef.get();
         
-        console.log(`📊 Found ${querySnapshot.size} total users in database`);
+        // console.log(`📊 Found ${querySnapshot.size} total users in database`);
         
         const matchingUsers = [];
         
@@ -235,7 +235,7 @@ async function filterProfiles(keyword) {
             }
         });
         
-        console.log(`✅ Found ${matchingUsers.length} matching users`);
+        // console.log(`✅ Found ${matchingUsers.length} matching users`);
         
         if (matchingUsers.length === 0) {
             searchResults.innerHTML = '<div style="text-align: center; padding: 2rem; color: #666;">No matching profiles found</div>';
@@ -276,7 +276,7 @@ async function filterProfiles(keyword) {
         }).join('');
         
         searchResults.innerHTML = resultsHTML;
-        console.log('✅ Search results displayed successfully');
+        // console.log('✅ Search results displayed successfully');
         
     } catch (error) {
         console.error('❌ Error filtering profiles:', error);
@@ -299,7 +299,7 @@ function getFirestore() {
 // grok recommendation to improve search functionality function
 
 async function searchDevelopersByKeyword(keyword) {
-    console.log(`🔍 Searching for developers with keyword: "${keyword}"`);
+    // console.log(`🔍 Searching for developers with keyword: "${keyword}"`);
     
     const searchResults = document.getElementById('searchResults');
     if (!searchResults) {
@@ -319,17 +319,17 @@ async function searchDevelopersByKeyword(keyword) {
             throw new Error('Firestore is not initialized');
         }
         
-        console.log('📊 Querying Firestore users collection...');
+        // console.log('📊 Querying Firestore users collection...');
         
         const usersRef = window.db.collection('users');
         const querySnapshot = await usersRef.get();
         
-        console.log(`📋 Found ${querySnapshot.size} total users in collection`);
+        // console.log(`📋 Found ${querySnapshot.size} total users in collection`);
         
         const matchingUsers = [];
         // Normalize and split keywords
         const keywords = keyword.toLowerCase().trim().split(/\s+/).filter(word => word.length > 0);
-        console.log(`🔍 Keywords after splitting:`, keywords);
+        // console.log(`🔍 Keywords after splitting:`, keywords);
         
         querySnapshot.forEach(doc => {
             const userData = doc.data();
@@ -341,17 +341,17 @@ async function searchDevelopersByKeyword(keyword) {
             const about = (userData.about || '').toLowerCase();
             const combinedText = `${role} ${skills} ${about}`.trim();
             
-            console.log(`📝 Checking user ${userId}, combined text:`, combinedText);
+            // console.log(`📝 Checking user ${userId}, combined text:`, combinedText);
             
             // Check if ANY keyword is present in combined text
             const matchAnyWord = keywords.some(word => {
                 const isMatch = combinedText.includes(word);
-                console.log(`🔍 Checking word "${word}" in user ${userId}: ${isMatch}`);
+                // console.log(`🔍 Checking word "${word}" in user ${userId}: ${isMatch}`);
                 return isMatch;
             });
             
             if (matchAnyWord) {
-                console.log(`✅ User ${userId} matches keyword "${keyword}"`);
+                // console.log(`✅ User ${userId} matches keyword "${keyword}"`);
                 matchingUsers.push({
                     id: userId,
                     ...userData
@@ -359,7 +359,7 @@ async function searchDevelopersByKeyword(keyword) {
             }
         });
         
-        console.log(`🎯 Found ${matchingUsers.length} users matching keyword "${keyword}"`);
+        // console.log(`🎯 Found ${matchingUsers.length} users matching keyword "${keyword}"`);
         
         if (matchingUsers.length === 0) {
             searchResults.innerHTML = `
@@ -430,7 +430,7 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
             return;
         }
         
-        console.log(`📊 Displaying ${developers.length} search results for keyword: "${keyword}"`);
+        // console.log(`📊 Displaying ${developers.length} search results for keyword: "${keyword}"`);
         
         const resultsHTML = developers.map(developer => {
             const topSkills = (developer.skills || []).slice(0, 3);
@@ -476,7 +476,7 @@ function displaySearchResults(developers, keyword, errorMessage = null) {
         `;
         
         searchResults.innerHTML = completeResultsHTML;
-        console.log('✅ Search results displayed successfully');
+        // console.log('✅ Search results displayed successfully');
         
     } catch (error) {
         console.error('❌ Error displaying search results:', error);
@@ -511,11 +511,11 @@ function renderSearchResults(results) {
                     <p>Try a different search term or browse our developer categories below.</p>
                 </div>
             `;
-            console.log('📝 Displayed no results message');
+            // console.log('📝 Displayed no results message');
             return;
         }
         
-        console.log(`📊 Rendering ${results.length} search results`);
+        // console.log(`📊 Rendering ${results.length} search results`);
         
         const resultsContainer = document.createElement('div');
         resultsContainer.className = 'search-results-container';
@@ -536,7 +536,7 @@ function renderSearchResults(results) {
         searchResults.appendChild(resultsHeader);
         searchResults.appendChild(resultsContainer);
         
-        console.log('✅ Search results rendered successfully');
+        // console.log('✅ Search results rendered successfully');
         
     } catch (error) {
         console.error('❌ Error rendering search results:', error);
@@ -840,4 +840,4 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-console.log('📁 search.js loaded successfully');
+// console.log('📁 search.js loaded successfully');

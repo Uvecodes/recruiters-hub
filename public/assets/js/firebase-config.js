@@ -35,7 +35,7 @@ if (!firebase.apps.length) {
 }
 
 window.db = firebase.firestore();
-console.log("✅ Firebase initialized and Firestore is available as window.db");
+// console.log("✅ Firebase initialized and Firestore is available as window.db");
 
 // Make Firebase services globally available
 // window.firebase = {
@@ -55,7 +55,7 @@ window.firebaseAuth = firebase.auth();
 window.firebaseDB = firebase.firestore();
 window.firebaseStorage = firebase.storage();
 
-console.log("✅ Firebase initialized");
+// console.log("✅ Firebase initialized");
 
 // ✅ Optionally expose globally still part of gpt check
 window.firebaseAuth = auth;
@@ -70,7 +70,7 @@ auth.onAuthStateChanged((user) => {
         updateUIForAuthenticatedUser(user);
     } else {
         // User is signed out
-        console.log('User is signed out');
+        // console.log('User is signed out');
         updateUIForUnauthenticatedUser();
     }
 });
@@ -103,7 +103,7 @@ window.firebaseFunctions = {
     // doc
 };
 
-console.log('Firebase initialized successfully with ES6 modules');
+// console.log('Firebase initialized successfully with ES6 modules');
 
 // Update UI for authenticated user
 function updateUIForAuthenticatedUser(user) {

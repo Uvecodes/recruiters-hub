@@ -1,5 +1,5 @@
 // Profile-2.js - View-only user settings page for recruiters
-console.log('📄 profile-2.js loaded');
+// console.log('📄 profile-2.js loaded');
 
 // Global variables
 // let db = null;
@@ -7,7 +7,7 @@ let currentUserId = null;
 
 // Initialize the profile page
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Initializing profile page...');
+    // console.log('🚀 Initializing profile page...');
     
     // Get user ID from URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
     
-    console.log(`👤 Loading profile for user: ${currentUserId}`);
+    // console.log(`👤 Loading profile for user: ${currentUserId}`);
     
     // Initialize Firebase and load profile
     initializeFirebase();
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Initialize Firebase
 async function initializeFirebase() {
     try {
-        console.log('🔥 Initializing Firebase...');
+        // console.log('🔥 Initializing Firebase...');
         
         // Check if Firebase is already initialized
         if (typeof firebase === 'undefined') {
@@ -37,7 +37,7 @@ async function initializeFirebase() {
         
         // Initialize Firestore
         const db = firebase.firestore();
-        console.log('✅ Firebase initialized successfully');
+        // console.log('✅ Firebase initialized successfully');
         
         // Load profile data
         await loadProfileData();
@@ -51,7 +51,7 @@ async function initializeFirebase() {
 // Load profile data from Firestore
 async function loadProfileData() {
     try {
-        console.log(`📊 Fetching profile data for user: ${currentUserId}`);
+        // console.log(`📊 Fetching profile data for user: ${currentUserId}`);
         
         // Show loading state
         showLoading();
@@ -66,7 +66,7 @@ async function loadProfileData() {
         }
         
         const userData = userDoc.data();
-        console.log('✅ Profile data fetched successfully:', userData);
+        // console.log('✅ Profile data fetched successfully:', userData);
         
         // Render profile data
         renderProfile(userData);
@@ -80,7 +80,7 @@ async function loadProfileData() {
 // Render profile data
 function renderProfile(userData) {
     try {
-        console.log('🎨 Rendering profile data...');
+        // console.log('🎨 Rendering profile data...');
         
         // Hide loading state
         hideLoading();
@@ -106,7 +106,7 @@ function renderProfile(userData) {
         // Show profile content
         document.getElementById('profileContent').style.display = 'block';
         
-        console.log('✅ Profile rendered successfully');
+        // console.log('✅ Profile rendered successfully');
         
     } catch (error) {
         console.error('❌ Error rendering profile:', error);
@@ -339,4 +339,4 @@ window.profile2 = {
     showError
 };
 
-console.log('✅ profile-2.js initialization complete'); 
+// console.log('✅ profile-2.js initialization complete'); 

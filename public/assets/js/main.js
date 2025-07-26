@@ -437,13 +437,13 @@ async function updateDashboardUserInfo() {
 // typewriter effect testing
  // Simple test to verify typewriter works
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, testing typewriter...');
+            // console.log('DOM loaded, testing typewriter...');
             const testElement = document.getElementById('typewriter-text');
             if (testElement) {
-                console.log('Found typewriter element:', testElement);
-                console.log('Element text:', testElement.textContent);
+                // console.log('Found typewriter element:', testElement);
+                // console.log('Element text:', testElement.textContent);
             } else {
-                console.log('Typewriter element NOT found!');
+                // console.log('Typewriter element NOT found!');
             }
         });
 
@@ -453,7 +453,7 @@ async function updateDashboardUserInfo() {
             const typewriterElement = document.getElementById('typewriter-text');
             
             if (!typewriterElement) {
-                console.log('Typewriter element not found in standalone script');
+                // console.log('Typewriter element not found in standalone script');
                 return;
             }
             
